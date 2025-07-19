@@ -143,6 +143,8 @@ namespace WarehouseManagementService.Implement
         {
             try
             {
+                category.UpdatedDateTime = DateTime.Now;
+                category.CreatedDateTime = DateTime.Now;
                 int result = await _unitOfWork.CategoryRepository.CreateAsync(category);
                 if (result > 0)
                 {
@@ -190,6 +192,8 @@ namespace WarehouseManagementService.Implement
         {
             try
             {
+                category.CreatedDateTime = DateTime.Now;
+                category.UpdatedDateTime = DateTime.Now;
                 int result = await _unitOfWork.CategoryRepository.UpdateAsync(category);
                 if (result > 0)
                 {
