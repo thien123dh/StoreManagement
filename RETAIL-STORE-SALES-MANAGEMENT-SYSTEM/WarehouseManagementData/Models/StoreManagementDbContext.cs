@@ -33,7 +33,7 @@ public partial class StoreManagementDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=HELLOHAVAN\\SQLEXPRESS;User Id=sa;Password=1234567890;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=(local);User Id=sa;Password=12345;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -47,14 +47,6 @@ public partial class StoreManagementDbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(255);
             entity.Property(e => e.Status).HasDefaultValue((short)1);
             entity.Property(e => e.UpdatedDateTime).HasPrecision(0);
-
-            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.CategoryCreatedByNavigations)
-                .HasForeignKey(d => d.CreatedBy)
-                .HasConstraintName("Category_Users_FK");
-
-            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.CategoryUpdatedByNavigations)
-                .HasForeignKey(d => d.UpdatedBy)
-                .HasConstraintName("Category_Users_FK_1");
         });
 
         modelBuilder.Entity<Customer>(entity =>
@@ -74,13 +66,6 @@ public partial class StoreManagementDbContext : DbContext
             entity.Property(e => e.Fullname).HasMaxLength(255);
             entity.Property(e => e.UpdatedDateTime).HasPrecision(0);
 
-            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.CustomerCreatedByNavigations)
-                .HasForeignKey(d => d.CreatedBy)
-                .HasConstraintName("Customer_Users_FK");
-
-            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.CustomerUpdatedByNavigations)
-                .HasForeignKey(d => d.UpdatedBy)
-                .HasConstraintName("Customer_Users_FK_1");
         });
 
         modelBuilder.Entity<ImportRequest>(entity =>
@@ -96,14 +81,6 @@ public partial class StoreManagementDbContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Status).HasDefaultValue((short)1);
             entity.Property(e => e.UpdatedDateTime).HasPrecision(0);
-
-            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.ImportRequestCreatedByNavigations)
-                .HasForeignKey(d => d.CreatedBy)
-                .HasConstraintName("ImportRequest_Users_FK");
-
-            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.ImportRequestUpdatedByNavigations)
-                .HasForeignKey(d => d.UpdatedBy)
-                .HasConstraintName("ImportRequest_Users_FK_1");
         });
 
         modelBuilder.Entity<ImportRequestDetail>(entity =>
@@ -145,18 +122,6 @@ public partial class StoreManagementDbContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Status).HasDefaultValue((short)1);
             entity.Property(e => e.UpdatedDateTime).HasPrecision(0);
-
-            entity.HasOne(d => d.Category).WithMany(p => p.Products)
-                .HasForeignKey(d => d.CategoryId)
-                .HasConstraintName("Product_Category_FK");
-
-            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.ProductCreatedByNavigations)
-                .HasForeignKey(d => d.CreatedBy)
-                .HasConstraintName("Product_Users_FK");
-
-            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.ProductUpdatedByNavigations)
-                .HasForeignKey(d => d.UpdatedBy)
-                .HasConstraintName("Product_Users_FK_1");
         });
 
         modelBuilder.Entity<Receipt>(entity =>
@@ -174,10 +139,6 @@ public partial class StoreManagementDbContext : DbContext
                 .HasMaxLength(500)
                 .IsUnicode(false);
             entity.Property(e => e.TotalPrice).HasColumnType("decimal(18, 2)");
-
-            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.Receipts)
-                .HasForeignKey(d => d.CreatedBy)
-                .HasConstraintName("Receipt_Users_FK");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Receipts)
                 .HasForeignKey(d => d.CustomerId)

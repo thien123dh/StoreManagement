@@ -1,57 +1,233 @@
 ﻿@section PageStyles {
     @RenderSection("PageStyles", required: false)
 }
-
+@{
+    var currentPath = Context.Request.Path.ToString();
+    var isActiveProduct = currentPath.Contains("ProductManagement");
+    var activeProductClass = isActiveProduct ? "text-gray-400 bg-gray-200" : "text-gray-300 hover:bg-gray-100 hover:text-gray-700";
+    var isActiveReceipt = currentPath.Contains("ReceiptManagement");
+    var activeReceiptClass = isActiveReceipt ? "text-gray-400 bg-gray-200" : "text-gray-300 hover:bg-gray-100 hover:text-gray-700";
+    var isActiveUser = currentPath.Contains("UserManagement");
+    var activeUserClass = isActiveUser ? "text-gray-400 bg-gray-200" : "text-gray-300 hover:bg-gray-100 hover:text-gray-700";
+    var isActiveCategory = currentPath.Contains("CategoryProduct");
+    var activeCategoryClass = isActiveCategory ? "text-gray-400 bg-gray-200" : "text-gray-300 hover:bg-gray-100 hover:text-gray-700";
+    var isActiveDashboard = currentPath.Contains("Dashboard");
+    var activeDashboardClass = isActiveDashboard ? "text-gray-400 bg-gray-200" : "text-gray-300 hover:bg-gray-100 hover:text-gray-700";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WarehouseManagementController</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Site CSS -->
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WarehouseManagementController.styles.css" asp-append-version="true" />
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">WarehouseManagementController</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="flex flex-row min-h-screen bg-gray-100 text-gray-800">
+        <aside class="sidebar w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in bg-blue-700">
+            <div class="sidebar-header flex items-center justify-center py-4">
+                <div class="inline-flex">
+                    <a href="/Admin">
+                        <img src="/img/z5848027674510_1678da8f2f576d67c74ec3fdb0ace680.jpg" alt="logo" class='w-24 h-24 object-cover rounded-full mx-auto' />
+                    </a>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+            <div class="sidebar-content px-4 py-6">
+                <ul class="flex flex-col w-full">
+                    <li class="my-px">
+                        <a href="/Admin"
+                           class="flex flex-row items-center h-10 px-3 rounded-lg @activeDashboardClass">
+                            <span class="flex items-center justify-center text-lg text-gray-400">
+                                <svg fill="none"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     class="h-6 w-6">
+                                    <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                            </span>
+                            <span class="ml-3">Thống kê</span>
+                        </a>
+                    </li>
+                    <li class="my-px">
+                        <span class="flex font-medium text-sm text-gray-300 px-4 my-4 uppercase">Nhân sự</span>
+                    </li>
+                    <li class="my-px">
+                        <a href="/UserManagement/SearchUser"
+                           class="flex flex-row items-center h-10 px-3 rounded-lg @activeUserClass">
+                            <span class="flex items-center justify-center text-lg text-gray-400">
+                                <svg fill="none"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     class="h-6 w-6">
+                                    <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </span>
+                            <span class="ml-3">Quản lý nhân sự</span>
+
+                        </a>
+                    </li>
+                    <li class="my-px">
+                        <span class="flex font-medium text-sm text-gray-300 px-4 my-4 uppercase">Sản phẩm</span>
+                    </li>
+                    <li class="my-px">
+                        <a href="/CategoryProduct/Category"
+                           class="flex flex-row items-center h-10 px-3 rounded-lg @activeCategoryClass">
+                            <span class="flex items-center justify-center text-lg text-gray-400">
+                                <svg fill="none"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     class="h-6 w-6">
+                                    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                                </svg>
+                            </span>
+                            <span class="ml-3">Quản lý danh mục</span>
+                        </a>
+                    </li>
+                    <li class="my-px">
+                        <a href="/ProductManagement/SearchProduct"
+                           class="flex flex-row items-center h-10 px-3 rounded-lg @activeProductClass">
+                            <span class="flex items-center justify-center text-lg text-gray-400">
+                                <svg fill="none"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     class="h-6 w-6">
+                                    <path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                                </svg>
+                            </span>
+                            <span class="ml-3">Quản lý sản phẩm</span>
+                        </a>
+                    </li>
+                    <li class="my-px">
+                        <a href="/ReceiptManagement/SearchReceipt"
+                           class="flex flex-row items-center h-10 px-3 rounded-lg @activeReceiptClass">
+                            <span class="flex items-center justify-center text-lg text-gray-400">
+                                <svg fill="none"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     class="h-6 w-6">
+                                    <path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                                </svg>
+                            </span>
+                            <span class="ml-3">Quản lý Hóa đơn</span>
+                        </a>
+                    </li>
+                    <li class="my-px">
+                        <span class="flex font-medium text-sm text-gray-300 px-4 my-4 uppercase">Account</span>
+                    </li>
+                    <li class="my-px">
+                        <a href="/Logout"
+                           class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                            <span class="flex items-center justify-center text-lg text-red-400">
+                                <svg fill="none"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     class="h-6 w-6">
+                                    <path d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                                </svg>
+                            </span>
+                            <span class="ml-3">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <main class="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
+            <header class="header bg-white shadow py-4 px-4">
+                <div class="header-content flex items-center flex-row">
+                    <form action="#">
+                        <div class="hidden md:flex relative">
+                            <div class="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
+                                <svg class="h-6 w-6"
+                                     fill="none"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor">
+                                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+
+                            <form method="get">
+                                <div class="input-group">
+                                    <input placeholder="Search..." class="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-300 w-full h-10 focus:outline-none focus:border-indigo-400">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="flex md:hidden">
+                            <a href="#" class="flex items-center justify-center h-10 w-10 border-transparent">
+                                <svg class="h-6 w-6 text-gray-500"
+                                     fill="none"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor">
+                                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </form>
+                    <div class="flex ml-auto">
+                        <a href="#" class="flex flex-row items-center">
+                            <img src="https://avatars.githubusercontent.com/u/16786985?v=4"
+                                 alt
+                                 class="h-10 w-10 bg-gray-200 border rounded-full" />
+                            <span class="flex flex-col ml-2">
+                                <span class="truncate w-20 font-semibold tracking-wide leading-none">Admin</span>
+                                <span class="truncate w-20 text-gray-500 text-xs leading-none mt-1">Manager</span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            @if (ViewData["ErrorMessage"] != null)
+            {
+                <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                    @ViewData["ErrorMessage"]
+                </div>
+            }
             @RenderBody()
-        </main>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('select-all').addEventListener('click', function (event) {
+                const checkboxes = document.querySelectorAll('.form-checkbox');
+                checkboxes.forEach(checkbox => checkbox.checked = event.target.checked);
+            });
+        });
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - WarehouseManagementController - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
+    </script>
 
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @*  </main>
+            </div> *@
+    @* } *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

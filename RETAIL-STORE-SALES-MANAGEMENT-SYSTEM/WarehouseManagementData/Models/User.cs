@@ -23,27 +23,12 @@ public partial class User
 
     public int? Status { get; set; }
 
+    public virtual string StatusName => Status == 1 ? "Kích hoạt" : "Ban";
+
     public int Role { get; set; }
 
-    public virtual String RoleName => Role == 1 ? "Admin" : Role == 2 ? "Cashier" : "Import";
+    public virtual String RoleName => Role == 1 ? "Admininistration" : Role == 2 ? "Thu ngân" : "Quản lý kho";
 
     public string BusinessId { get; set; } = null!;
 
-    public virtual ICollection<Category> CategoryCreatedByNavigations { get; set; } = new List<Category>();
-
-    public virtual ICollection<Category> CategoryUpdatedByNavigations { get; set; } = new List<Category>();
-
-    public virtual ICollection<Customer> CustomerCreatedByNavigations { get; set; } = new List<Customer>();
-
-    public virtual ICollection<Customer> CustomerUpdatedByNavigations { get; set; } = new List<Customer>();
-
-    public virtual ICollection<ImportRequest> ImportRequestCreatedByNavigations { get; set; } = new List<ImportRequest>();
-
-    public virtual ICollection<ImportRequest> ImportRequestUpdatedByNavigations { get; set; } = new List<ImportRequest>();
-
-    public virtual ICollection<Product> ProductCreatedByNavigations { get; set; } = new List<Product>();
-
-    public virtual ICollection<Product> ProductUpdatedByNavigations { get; set; } = new List<Product>();
-
-    public virtual ICollection<Receipt> Receipts { get; set; } = new List<Receipt>();
 }
