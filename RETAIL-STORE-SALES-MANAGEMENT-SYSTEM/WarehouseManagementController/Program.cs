@@ -25,6 +25,7 @@ builder.Services.AddScoped<UnitOfWork>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<ICategoryServices, CategoryServices>();
 
