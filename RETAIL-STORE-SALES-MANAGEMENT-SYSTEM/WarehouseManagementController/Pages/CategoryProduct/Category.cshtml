@@ -282,7 +282,8 @@
                                 <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                                     <th class="px-4 py-3"><input type="checkbox" id="select-all" class="form-checkbox"></th>
                                     <th class="px-4 py-3">Service Name</th>
-                                    <th class="px-4 py-3">Description</th>
+                                    <th class="px-4 py-3">Create By</th>
+                                    <th class="px-4 py-3">Create Date</th>
                                     <th class="px-4 py-3">Action</th>
                                 </tr>
                             </thead>
@@ -292,7 +293,10 @@
                                     <tr  class="text-gray-700 dark:text-gray-400">
                                         <td class="px-4 py-3"><input type="checkbox" class="form-checkbox"></td>
                                         <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Name)</td>
-                                       @*  <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Description)</td> *@
+                                        <td class="px-4 py-3 text-sm">Admin</td>
+                                    <td class="px-4 py-3 text-sm">
+                                        @item.CreatedDateTime?.ToString("dd/MM/yyyy")
+                                    </td>
                                         <td class="px-4 py-3">
                                             <div class="flex items-center space-x-4 text-sm">
                                                 <a asp-page="./Update-Cate" asp-route-id="@item.Id"
