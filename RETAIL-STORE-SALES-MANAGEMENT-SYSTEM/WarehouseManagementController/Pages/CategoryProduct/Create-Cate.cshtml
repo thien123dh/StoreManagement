@@ -13,7 +13,7 @@
 </head>
 <body>
     <div class="main-content flex flex-col flex-grow p-4">
-        <h1 class="font-bold text-2xl text-gray-700">Create Services</h1>
+        <h1 class="font-bold text-2xl text-gray-700">Tạo danh mục</h1>
         <!-- Toast Message for Failure -->
         <div id="toastMessage" class="hidden mt-4 p-4 bg-red-500 text-white rounded-lg">
             Create failure
@@ -21,13 +21,14 @@
         <form method="post" class="mt-6">
 
             <div class="mb-4">
-                <label asp-for="Category.Name" class="block text-gray-700 font-semibold mb-2">Category Name</label>
+                <label asp-for="Category.Name" class="block text-gray-700 font-semibold mb-2">Tên danh mục</label>
                 <input asp-for="Category.Name" type="text" id="categoryName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Enter Category Name" required>
                 <span asp-validation-for="Category.Name" class="text-danger"></span>
             </div>
 
             <div class="flex justify-end">
-                <button type="submit" value="Create" class="px-6 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-700 transition duration-300">Create</button>
+                <button type="submit" value="Create" class="px-6 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-700 transition duration-300">Tạo</button>
+                <a type="button" asp-page="Category" class="px-6 py-2 bg-red-500 text-white font-bold rounded-lg hover:bg-red-700 transition duration-300">Quay lại</a>
             </div>
         </form>
     </div>
