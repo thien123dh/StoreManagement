@@ -25,6 +25,8 @@ public partial class User
 
     public int Role { get; set; }
 
+    public virtual String RoleName => Role == 1 ? "Admin" : Role == 2 ? "Cashier" : "Import";
+
     public string BusinessId { get; set; } = null!;
 
     public virtual ICollection<Category> CategoryCreatedByNavigations { get; set; } = new List<Category>();
