@@ -95,11 +95,6 @@ public partial class StoreManagementDbContext : DbContext
                 .HasForeignKey(d => d.ImportRequestId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("ImportRequestDetail_ImportRequest_FK");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.ImportRequestDetails)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("ImportRequestDetail_Product_FK");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -153,10 +148,6 @@ public partial class StoreManagementDbContext : DbContext
 
             entity.Property(e => e.Price).HasColumnType("decimal(38, 0)");
             entity.Property(e => e.ProductName).HasMaxLength(500);
-
-            entity.HasOne(d => d.Product).WithMany(p => p.ReceiptDetails)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("ReceiptDetail_Product_FK");
 
             entity.HasOne(d => d.Receipt).WithMany(p => p.ReceiptDetails)
                 .HasForeignKey(d => d.ReceiptId)

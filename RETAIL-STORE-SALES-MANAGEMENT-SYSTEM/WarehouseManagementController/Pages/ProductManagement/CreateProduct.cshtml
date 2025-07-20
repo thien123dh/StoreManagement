@@ -1,0 +1,85 @@
+﻿@page
+@model WarehouseManagementController.Pages.ProductManagement.CreateProductModel
+@{
+}
+
+<div class="main-content user-details flex flex-col flex-grow p-4">
+    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+        Chỉnh sửa sản phẩm
+    </h4>
+
+    <div class="w-full overflow-x-auto">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-4">
+                    <label asp-for="Product.Name" class="block text-gray-700 font-semibold mb-2">Tên Sản Phẩm</label>
+                    <input asp-for="Product.Name" type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập tên đăng nhập" required>
+                    <span asp-validation-for="Product.Name" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Product.CategoryId" class="block text-gray-700 font-semibold mb-2">Danh mục sản phẩm</label>
+                    <select asp-for="Product.CategoryId" asp-items="Model.Categories" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                        <option value="">---Chọn danh mục sản phẩm---</option>
+                    </select>
+                    <span asp-validation-for="Product.Status" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Product.Quantity" class="block text-gray-700 font-semibold mb-2">Số lượng</label>
+                    <input asp-for="Product.Quantity" type="number" id="categoryName" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập Email" required>
+                    <span asp-validation-for="Product.Quantity" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Product.Manufactor" class="block text-gray-700 font-semibold mb-2">Nhà sản xuất</label>
+                    <input asp-for="Product.Manufactor" type="text" id="categoryName" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập Email" required>
+                    <span asp-validation-for="Product.Manufactor" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Product.Description" class="block text-gray-700 font-semibold mb-2">Thông số/Chi tiết</label>
+                    <textarea asp-for="Product.Description" id="categoryName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="" required></textarea>
+                    <span asp-validation-for="Product.Description" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Product.ImportPrice" class="block text-gray-700 font-semibold mb-2">Giá nhập</label>
+                    <input asp-for="Product.ImportPrice" type="number" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                    <span asp-validation-for="Product.ImportPrice" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Product.SellingPrice" class="block text-gray-700 font-semibold mb-2">Giá bán</label>
+                    <input asp-for="Product.SellingPrice" type="number" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                    <span asp-validation-for="Product.SellingPrice" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Product.Notes" class="block text-gray-700 font-semibold mb-2">Ghi chú</label>
+                    <textarea asp-for="Product.Notes" type="text" id="categoryName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="" required></textarea>
+                    <span asp-validation-for="Product.Notes" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Product.Status" class="block text-gray-700 font-semibold mb-2">Trạng thái</label>
+                    <select asp-for="Product.Status" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                        <option value="1">Kích hoạt</option>
+                        <option value="0">Ban</option>
+                    </select>
+                    <span asp-validation-for="Product.Status" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <div class="flex justify-end space-x-2 mb-4">
+                        <a asp-page="ImportRequest" class="px-4 py-2 font-semibold leading-tight text-white bg-red-600 rounded-full hover:bg-red-700">
+                            Quay lại
+                        </a>
+                        <button asp-page-handler="ImportProduct" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
+                            Thêm sản phẩm
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
