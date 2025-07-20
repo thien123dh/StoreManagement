@@ -1,0 +1,79 @@
+﻿@page "{id:int}"
+@model WarehouseManagementController.Pages.ProductManagement.ProductDetailsModel
+@{
+    ViewData["Title"] = "Sản phẩm";
+}
+
+<body>
+    <div class="container mx-auto mt-10">
+        <div class="grid grid-cols-8 gap-4">
+            <!-- Section A -->
+            <div class="col-span-1"></div>
+            <div class="col-span-2 bg-white shadow-lg rounded-lg p-4 text-center ">
+                <div class="mt-4 flex item-center ">
+                    <img src="@Model.Product.ImageUrl"
+                         alt="Ảnh đại diện"
+                         class="w-50 h-50 mt-4 rounded-lg border-2 border-gray-300 shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out transform hover:scale-105">
+                </div>
+            </div>
+            <div class="col-span-4 bg-white shadow-lg rounded-lg p-4">
+                <div class="border-1">
+                    <h1 class="text-xl font-bold mt-4">@Model.Product.Name </h1>
+                </div>
+
+                <div class="grid gap-4 mt-4">
+                    <div class="grid-cols-8">
+                        <div class="col-span-4">
+                            <h3 class="text-lg font-semibold"><span class="bold">Nhà sản xuất: </span> @Model.Product.Manufactor</h3>
+                        </div>
+                        <div class="col-span-4 mt-4">
+                            <h3 class="text-lg font-semibold"><span class="bold">Danh mục sản phẩm: </span> @Model.Product.Category.Name</h3>
+                        </div>
+                        <div class="col-span-4 mt-4">
+                            <span class="font-bold">Số lượng: </span> @(Model.Product.Quantity > 0 ? Model.Product.Quantity : "Hết hàng")
+                        </div>
+                        <div class="col-span-4 mt-4">
+                            <span class="font-bold">Tình trạng: </span> @Model.Product.StatusName
+                        </div>
+                    </div>
+                </div>
+                <div class="grid gap-4 mt-4">
+                    <div class="grid-cols-8">
+                        <div class="col-span-4">
+                            <div><span class="font-bold">Nhập bởi: </span> @Model.Product.CreatedByNavigation.Username</div>
+                            <div><span class="font-bold">Nhập ngày: </span> @Model.Product.CreatedDateTime</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid gap-4 p-4 bg-light gray-ccc">
+                    <div>
+                        <p class="text-gray-600 mt-2">@Model.Product.Description</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 mt-2 color-red">@Model.Product.Notes</p>
+                    </div>
+                </div>
+
+                <!-- Experience and Specialization -->
+                <div>
+                    <p class="text-gray-600 mt-2">Giá nhập: @string.Format("{0:N0} VND", Model.Product.ImportPrice)</p>
+                    <p class="text-gray-600 mt-2">Giá bán: @string.Format("{0:N0} VND", Model.Product.SellingPrice)</p>
+                </div>
+
+                <div class="flex justify-end space-x-2 mb-4">
+                    <a asp-page="SearchProduct" class="px-4 py-2 font-semibold leading-tight text-white bg-red-600 rounded-full hover:bg-blue-700">
+                        Quay lại
+                    </a>
+                    <a asp-page="AddProduct" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
+                        Thêm sản phẩm
+                    </a>
+                    <a asp-page="UpdateProduct" asp-route-id="@Model.Id" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
+                        Chỉnh sửa
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-span-1"></div>
+        </div>
+    </div>
+</body>

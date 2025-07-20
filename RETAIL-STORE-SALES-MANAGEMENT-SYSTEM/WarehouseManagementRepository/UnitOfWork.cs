@@ -9,6 +9,7 @@ namespace WarehouseManagementRepository
 {
     public class UnitOfWork
     {
+        public virtual ProductRepository ProductRepository => new ProductRepository();
         public virtual UserRepository UserRepository => new UserRepository();
 
         public virtual CategoryRepository CategoryRepository => new CategoryRepository();

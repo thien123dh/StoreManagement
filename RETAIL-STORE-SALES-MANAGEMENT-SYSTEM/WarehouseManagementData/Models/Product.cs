@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WarehouseManagementData.Models;
 
@@ -21,11 +22,15 @@ public partial class Product
 
     public decimal? ImportPrice { get; set; }
 
+    public string? ImageUrl { set; get; }
+
     public DateTime? ManufactureDateTime { get; set; }
 
     public string? Notes { get; set; }
 
     public short? Status { get; set; }
+
+    public virtual string StatusName => Status == 1 ? "Còn sử dụng" : "Không còn sử dụng";
 
     public int? CreatedBy { get; set; }
 
@@ -39,11 +44,6 @@ public partial class Product
 
     public virtual Category? Category { get; set; }
 
+    [ForeignKey(nameof(Product.CreatedBy))]
     public virtual User? CreatedByNavigation { get; set; }
-
-    public virtual ICollection<ImportRequestDetail> ImportRequestDetails { get; set; } = new List<ImportRequestDetail>();
-
-    public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; } = new List<ReceiptDetail>();
-
-    public virtual User? UpdatedByNavigation { get; set; }
 }

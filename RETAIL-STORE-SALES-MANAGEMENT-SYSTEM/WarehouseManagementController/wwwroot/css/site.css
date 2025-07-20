@@ -24,3 +24,11 @@ body {
 .field-validation-error{
     color: red;
 }
+
+.gray-ccc {
+    background-color: #ccc;
+}
+
+.color-blue{
+    color: blue;
+}

@@ -1,0 +1,168 @@
+﻿@page
+@model WarehouseManagementController.Pages.ProductManagement.SearchProductModel
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+</head>
+
+<body>
+    @*  @if (string.IsNullOrEmpty(userId))
+    {
+        <body class="bg-gray-100 flex items-center justify-center h-screen">
+
+            <div class="text-center">
+                <img src="https://cdn.dribbble.com/userupload/8726277/file/still-90096ae0b20436af7d475737af5b86e5.gif?resize=400x0" alt="404 Not Found" class="mx-auto w-1/2 md:w-1/3 lg:w-1/4">
+                <h1 class="text-4xl font-bold text-gray-800 mt-8">Oops! Page Not Found</h1>
+                <p class="text-gray-600 mt-4">The page you are looking for does not exist or has been moved.</p>
+                <a href="/" class="mt-6 inline-block px-6 py-3 bg-indigo-500 text-white font-semibold rounded-md hover:bg-indigo-600">Go Back to Home</a>
+            </div>
+
+        </body>
+    }
+    else
+    { *@
+    <!-- component -->
+    @* -------------------Main Component --------------- *@
+    <div class="main-content flex flex-col flex-grow p-4">
+        <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+            Quản lý sản phẩm
+        </h4>
+        <div class="w-full overflow-hidden rounded-lg shadow-xs">
+            <div class="flex justify-end space-x-2 mb-4">
+                <a asp-page="ImportRequest" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
+                    Nhập thêm sản phẩm
+                </a>
+            </div>
+        </div>
+
+        <div class="w-full overflow-x-auto">
+            <table class="w-full whitespace-no-wrap">
+                <thead>
+                    <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                        <th class="px-4 py-3">Mã sản phẩm</th>
+                        <th class="px-4 py-3">Tên sản phẩm</th>
+                        <th class="px-4 py-3">Nhà sản xuất</th>
+                        <th class="px-4 py-3">Giá bán</th>
+                        <th class="px-4 py-3">Danh mục</th>
+                        <th class="px-4 py-3">Tạo bởi</th>
+                        <th class="px-4 py-3">Tạo ngày</th>
+                        <th class="px-4 py-3">Tình trạng</th>
+                        <th class="px-4 py-3">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                    @foreach (var item in Model.Products.Items)
+                    {
+                        <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3 text-sm"><a asp-page="./ProductDetails" asp-route-id="@item.Id"><p class="color-blue">@Html.DisplayFor(modelItem => item.SerialNumber)</p></a></td>
+                            <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Manufactor)</td>
+                            <td class="px-4 py-3 text-sm">@string.Format("{0:N0} VND", item.SellingPrice)</td>
+                            <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Category.Name)</td>
+                            <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.CreatedByNavigation.Username)</td>
+                            <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.CreatedDateTime)</td>
+                            <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.StatusName)</td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center space-x-4 text-sm">
+                                    <a asp-page="./UpdateProduct" asp-route-id="@item.Id"
+                                       class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-black-600
+                                                                 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray btn btn-sm btn-warning">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7" />
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+            <span class="flex items-center col-span-3">
+            </span>
+            <span class="col-span-2"></span>
+            <!-- Pagination -->
+            <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+                <nav aria-label="Table navigation">
+                    <ul class="inline-flex items-center">
+                        <li>
+                            <button class="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple" aria-label="Previous">
+                                <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
+                                    <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple bg-blue-500 text-white">
+                                1
+                            </button>
+                        </li>
+                        <li>
+                            <span class="px-3 py-1">...</span>
+                        </li>
+                        <li>
+                            <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
+                                @(Model.Products.Page)
+                            </button>
+                        </li>
+                        <li>
+                            <span class="px-3 py-1">...</span>
+                        </li>
+                        <li>
+                            <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
+                                @(Model.Products.TotalPages)
+                            </button>
+                        </li>
+                        <li>
+                            <button class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple" aria-label="Next">
+                                <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
+                                    <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </span>
+        </div>
+    </div>
+    <footer class="footer px-4 py-6">
+        <div class="footer-content">
+            <p class="text-sm text-gray-600 text-center">© Graduation 2024. All rights reserved. <a href="https://github.com/VanHa1006/RentTutor_Project.git">by Group-7</a></p>
+        </div>
+    </footer>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('select-all').addEventListener('click', function (event) {
+                const checkboxes = document.querySelectorAll('.form-checkbox');
+                checkboxes.forEach(checkbox => checkbox.checked = event.target.checked);
+            });
+        });
+
+    </script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @*  </main>
+            </div> *@
+    @* } *@
+</body>
+
+</html>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
