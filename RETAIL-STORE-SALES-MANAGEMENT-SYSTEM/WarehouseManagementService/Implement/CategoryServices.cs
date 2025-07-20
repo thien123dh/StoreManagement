@@ -51,9 +51,9 @@ namespace WarehouseManagementService.Implement
                 //var currencies = _DAO.GetAll();
                 var category = await _unitOfWork.CategoryRepository.GetPagingListAsync(
                     selector: x => x,
+                    predicate: x => true,
                     page: page,
-                    size: size,
-                    include: x => x.Include(p => p.Products)
+                    size: size
                     );
                 if (category == null)
                 {
@@ -120,8 +120,7 @@ namespace WarehouseManagementService.Implement
             {
                 var category = await _unitOfWork.CategoryRepository.SingleOrDefaultAsync(
                     selector: x => x,
-                    predicate: x => x.Id.ToString() == id,
-                    include: x => x.Include(p => p.Products)
+                    predicate: x => x.Id.ToString() == id
                     );
                 if (category != null)
                 {
@@ -169,8 +168,7 @@ namespace WarehouseManagementService.Implement
                     selector: x => x,
                     predicate: x => x.Name.Contains(searchTerm),
                     page: page,
-                    size: size,
-                    include: x => x.Include(p => p.Products)
+                    size: size
                     );
 
                 if (productBrands != null)

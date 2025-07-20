@@ -58,7 +58,17 @@ namespace WarehouseManagementData.Base
 
         #endregion Separating asign entity and save operators
 
+        public T? Get(Expression<Func<T, bool>> expression)
+        {
+            return _dbSet
+                .FirstOrDefault(expression);
+        }
 
+        public IQueryable<T> Search(Expression<Func<T, bool>> expression)
+        {
+            return _dbSet
+                .Where(expression);
+        }
         public List<T> GetAll()
         {
             return _dbSet.ToList();

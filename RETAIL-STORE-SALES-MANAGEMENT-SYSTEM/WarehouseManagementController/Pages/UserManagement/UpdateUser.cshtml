@@ -1,0 +1,87 @@
+﻿@page "{id:int}"
+@model WarehouseManagementController.Pages.UserManagement.UpdateUserModel
+@{
+    ViewData["Title"] = $"Chi tiết tài khoản";
+}
+<div class="main-content user-details flex flex-col flex-grow p-4">
+    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+        Chi tiết tài khoản
+    </h4>
+
+    <div class="w-full overflow-x-auto">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-4">
+                    <label asp-for="User.BusinessId" class="block text-gray-700 font-semibold mb-2">Mã Nhân Viên</label>
+                    <input disabled asp-for="User.BusinessId" type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập tên đăng nhập">
+                    <span asp-validation-for="User.BusinessId" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="User.Username" class="block text-gray-700 font-semibold mb-2">Tên đăng nhập</label>
+                    <input disabled asp-for="User.Username" type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập tên đăng nhập">
+                    <span asp-validation-for="User.Username" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="User.Email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                    <input asp-for="User.Email" type="text" id="categoryName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập Email" required>
+                    <span asp-validation-for="User.Email" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="User.Fullname" class="block text-gray-700 font-semibold mb-2">Họ và tên</label>
+                    <input asp-for="User.Fullname" type="text" id="categoryName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="" required>
+                    <span asp-validation-for="User.Fullname" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="User.DateOfBirth" class="block text-gray-700 font-semibold mb-2">Ngày tháng năm sinh</label>
+                    <input asp-for="User.DateOfBirth" type="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                    <span asp-validation-for="User.DateOfBirth" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="User.ContactNumber" class="block text-gray-700 font-semibold mb-2">Số điện thoại</label>
+                    <input asp-for="User.ContactNumber" type="text" id="categoryName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="" required>
+                    <span asp-validation-for="User.ContactNumber" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="User.Gender" class="block text-gray-700 font-semibold mb-2">Giới tính</label>
+                    <select asp-for="User.Gender" asp-items="Model.GenderList" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                        <option value="">-- Chọn giới tính --</option>
+                    </select>
+                    <span asp-validation-for="User.Gender" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="User.Role" class="block text-gray-700 font-semibold mb-2">Role</label>
+                    <select asp-for="User.Role" asp-items="Model.RoleList" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                        <option value="">-- Chọn Role --</option>
+                    </select>
+                    <span asp-validation-for="User.Role" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="User.Status" class="block text-gray-700 font-semibold mb-2">Trạng thái</label>
+                    <select asp-for="User.Status" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                        <option value="1">Kích hoạt</option>
+                        <option value="0">Ban</option>
+                    </select>
+                    <span asp-validation-for="User.Status" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <div class="flex justify-end space-x-2 mb-4">
+                        <a asp-page="SearchUser" class="px-4 py-2 font-semibold leading-tight text-white bg-red-600 rounded-full hover:bg-red-700">
+                            Quay lại
+                        </a>
+                        <button type="submit" asp-page-handler="Create" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
+                            Chỉnh sửa tài khoản
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

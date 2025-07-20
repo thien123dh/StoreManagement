@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WarehouseManagementData.Models;
 
@@ -20,10 +21,4 @@ public partial class Category
     public DateTime? UpdatedDateTime { get; set; }
 
     public short? Status { get; set; }
-
-    public virtual User? CreatedByNavigation { get; set; }
-
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-
-    public virtual User? UpdatedByNavigation { get; set; }
 }
