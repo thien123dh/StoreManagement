@@ -6,13 +6,13 @@ using System.Text.Json;
 using WarehouseManagementData.Models;
 using WarehouseManagementRepository;
 using WarehouseManagementService.Dto.Request;
+using WarehouseManagementService.StateMemory;
 
 namespace WarehouseManagementController.Pages.ProductManagement
 {
     public class CreateProductModel : PageModel
     {
         private readonly UnitOfWork _unitOfWork;
-
 
         public List<SelectListItem> Categories = default!;
 
@@ -25,7 +25,7 @@ namespace WarehouseManagementController.Pages.ProductManagement
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            var categories = _unitOfWork.CategoryRepository.GetAll();
+            var categories = await _unitOfWork.CategoryRepository.GetAllAsync().ConfigureAwait(false);
 
             Categories = categories.Select(c => new SelectListItem
             {
@@ -35,6 +35,12 @@ namespace WarehouseManagementController.Pages.ProductManagement
 
             return Page();
         }
+
+        private int? GetLoginUserId()
+        {
+            return HttpContext.Session.GetInt32("UserID");
+        }
+
 
         public async Task<IActionResult> OnPostImportProductAsync()
         {
@@ -49,7 +55,9 @@ namespace WarehouseManagementController.Pages.ProductManagement
             product.Manufactor = Product.Manufactor;
             product.SellingPrice = Product.SellingPrice;
             product.ImportPrice = Product.ImportPrice;
+            product.Notes = Product.Notes;
             product.Status = Product.Status;
+            product.Quantity = Product.Quantity;
             product.CategoryId = Product.CategoryId;
             product.Description = Product.Description;
             product.Name = Product.Name;
@@ -57,17 +65,11 @@ namespace WarehouseManagementController.Pages.ProductManagement
             product.SellingPrice = Product.SellingPrice;
             product.UpdatedDateTime = DateTime.Now;
             product.CreatedDateTime = DateTime.Now;
+            product.CreatedBy = GetLoginUserId();
+            product.UpdatedBy = GetLoginUserId();
             product.Category = categories.FirstOrDefault(c => c.Id == product.CategoryId);
 
-            var importProductsJson = HttpContext.Session.GetString("ImportProducts");
-            List<Product> products = new List<Product>();
-            if (importProductsJson != null)
-            {
-                products = JsonSerializer.Deserialize<List<Product>>(importProductsJson) ?? default!;
-            }
-
-            products.Add(product);
-            HttpContext.Session.SetString("ImportProducts", JsonSerializer.Serialize(products));
+            StateMemory.ImportRequestProducts.Add(product);
             return RedirectToPage("./ImportRequest");
         }
     }

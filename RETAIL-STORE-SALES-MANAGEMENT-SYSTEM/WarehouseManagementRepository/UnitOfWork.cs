@@ -11,8 +11,10 @@ namespace WarehouseManagementRepository
     {
         public virtual ProductRepository ProductRepository => new ProductRepository();
         public virtual UserRepository UserRepository => new UserRepository();
-
         public virtual CategoryRepository CategoryRepository => new CategoryRepository();
+        public virtual ImportRequestRepository ImportRequestRepository => new ImportRequestRepository();
+
+        public virtual ImportRequestDetailRepository ImportRequestDetailRepository => new ImportRequestDetailRepository();
 
     }
 }

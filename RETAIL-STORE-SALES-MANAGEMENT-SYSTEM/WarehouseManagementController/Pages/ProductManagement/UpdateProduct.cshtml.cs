@@ -70,6 +70,7 @@ namespace WarehouseManagementController.Pages.ProductManagement
             product.Manufactor = Product.Manufactor;
             product.SellingPrice = Product.SellingPrice;
             product.Status = Product.Status;
+            product.Notes = Product.Notes;
             product.CategoryId = Product.CategoryId;
             product.Description = Product.Description;
             product.Name = Product.Name;
