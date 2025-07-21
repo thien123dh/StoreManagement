@@ -90,11 +90,6 @@ public partial class StoreManagementDbContext : DbContext
             entity.ToTable("ImportRequestDetail");
 
             entity.Property(e => e.ImportPrice).HasColumnType("decimal(18, 2)");
-
-            entity.HasOne(d => d.ImportRequest).WithMany(p => p.ImportRequestDetails)
-                .HasForeignKey(d => d.ImportRequestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("ImportRequestDetail_ImportRequest_FK");
         });
 
         modelBuilder.Entity<Product>(entity =>

@@ -34,13 +34,15 @@
         <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
             Quản lý sản phẩm
         </h4>
-        <div class="w-full overflow-hidden rounded-lg shadow-xs">
-            <div class="flex justify-end space-x-2 mb-4">
-                <a asp-page="ImportRequest" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
-                    Nhập thêm sản phẩm
-                </a>
+        <form method="post">
+            <div class="w-full overflow-hidden rounded-lg shadow-xs">
+                <div class="flex justify-end space-x-2 mb-4">
+                    <button asp-page-handler="RedirectToImportRequest" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
+                        Nhập thêm sản phẩm
+                    </button>
+                </div>
             </div>
-        </div>
+        </form>
 
         <div class="w-full overflow-x-auto">
             <table class="w-full whitespace-no-wrap">

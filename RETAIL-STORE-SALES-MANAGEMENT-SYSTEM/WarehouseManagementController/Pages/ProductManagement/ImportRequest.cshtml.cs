@@ -19,6 +19,11 @@ namespace WarehouseManagementController.Pages.ProductManagement
 
         [BindProperty(SupportsGet = true)]
         public List<Product> Products { set; get; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public string? SelectedId { set; get; } = "";
+
+        [BindProperty(SupportsGet = true)]
+        public List<SelectListItem> ProductSerialNumbers { set; get; } = default!;
 
         public ImportRequestModel(UnitOfWork unitOfWork)
         {
@@ -27,6 +32,12 @@ namespace WarehouseManagementController.Pages.ProductManagement
 
         public async Task InitDataAsync()
         {
+            ProductSerialNumbers = _unitOfWork.ProductRepository.Search(p => true).Select(p => new SelectListItem
+            {
+                Text = p.SerialNumber,
+                Value = p.Id.ToString()
+            }).ToList();
+
             ImportRequest = StateMemory.ImportRequest;
             Products = StateMemory.ImportRequestProducts;
         }
@@ -88,7 +99,18 @@ namespace WarehouseManagementController.Pages.ProductManagement
 
             _unitOfWork.ImportRequestRepository.Create(importRequest);
 
-            await _unitOfWork.ProductRepository.CreateManyAsync(importProducts).ConfigureAwait(false);
+            var createProducts = importProducts.Where(p => p.Id <= 0);
+            //var updateProducts = importProducts.Where(p => p.Id > 0);
+
+            //foreach (var product in updateProducts)
+            //{
+            //    var dbProduct = _unitOfWork.ProductRepository.Get(p => p.Id == product.Id);
+
+            //    product.Quantity = product.Quantity + dbProduct.Quantity;
+            //}
+
+            await _unitOfWork.ProductRepository.CreateManyAsync(createProducts).ConfigureAwait(false);
+            //await _unitOfWork.ProductRepository.UpdateManyAsync(updateProducts).ConfigureAwait(false);
 
             var importDetails = importProducts.Select(p =>
             {
@@ -115,6 +137,13 @@ namespace WarehouseManagementController.Pages.ProductManagement
 
         public async Task<IActionResult> OnPostCreateProductAsync()
         {
+            if (!SelectedId.IsNullOrEmpty())
+            {
+                var product = _unitOfWork.ProductRepository.Get(p => p.Id == int.Parse(SelectedId));
+                product.Quantity = 0;
+                StateMemory.ImportRequestProducts.Add(product);
+                return RedirectToPage("./ImportRequest");
+            }
             StateMemory.ImportRequest = ImportRequest;
 
             return RedirectToPage("./CreateProduct");

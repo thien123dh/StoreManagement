@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WarehouseManagementService.StateMemory;
 
 namespace WarehouseManagementController.Pages
 {
@@ -8,7 +9,7 @@ namespace WarehouseManagementController.Pages
         public IActionResult OnGet()
         {
             HttpContext.Session.Clear();
-
+            StateMemory.Clear();
             return RedirectToPage("./LoginPage");
         }
     }

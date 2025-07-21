@@ -19,6 +19,8 @@ namespace WarehouseManagementController.Pages.ProductManagement
         [BindProperty(SupportsGet = true)]
         public CreateProductRequest Product { set; get; } = default!;
 
+        [BindProperty(SupportsGet = true)]
+        public List<SelectListItem> ProductSerialNumbers { set; get; } = default!;
         public CreateProductModel(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;

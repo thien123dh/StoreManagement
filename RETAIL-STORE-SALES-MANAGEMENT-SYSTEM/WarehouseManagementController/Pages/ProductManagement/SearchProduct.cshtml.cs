@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WarehouseManagementData.Models;
 using WarehouseManagementData.Paging;
 using WarehouseManagementRepository;
+using WarehouseManagementService.StateMemory;
 
 namespace WarehouseManagementController.Pages.ProductManagement
 {
@@ -41,6 +42,12 @@ namespace WarehouseManagementController.Pages.ProductManagement
             return products;
         }
 
+        public async Task<IActionResult> OnPostRedirectToImportRequestAsync()
+        {
+            StateMemory.Clear();
+
+            return RedirectToPage("ImportRequest");
+        }
         public async Task<IActionResult> OnGetAsync()
         {
             var product = await SearchAsync();

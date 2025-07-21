@@ -14,8 +14,5 @@ public partial class ImportRequestDetail
     public decimal? ImportPrice { get; set; }
 
     public int? Quantity { get; set; }
-
-    public virtual ImportRequest ImportRequest { get; set; } = null!;
-
     public virtual Product Product { get; set; } = null!;
 }
