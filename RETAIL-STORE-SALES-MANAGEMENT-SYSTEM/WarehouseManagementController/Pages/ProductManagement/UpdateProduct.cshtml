@@ -55,17 +55,21 @@
                     <input asp-for="Product.SellingPrice" type="number" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                     <span asp-validation-for="Product.SellingPrice" class="text-danger"></span>
                 </div>
-
                 <div class="mb-4">
                     <label asp-for="Product.Notes" class="block text-gray-700 font-semibold mb-2">Ghi chú</label>
                     <textarea asp-for="Product.Notes" type="text" id="categoryName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="" required></textarea>
                     <span asp-validation-for="Product.Notes" class="text-danger"></span>
                 </div>
                 <div class="mb-4">
+                    <label asp-for="Product.ImageUrl" class="block text-gray-700 font-semibold mb-2">Link ảnh đại diện</label>
+                    <input asp-for="Product.ImageUrl" type="text" id="categoryName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="" required>
+                    <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
                     <label asp-for="Product.Status" class="block text-gray-700 font-semibold mb-2">Trạng thái</label>
                     <select asp-for="Product.Status" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                         <option value="1">Kích hoạt</option>
-                        <option value="0">Ban</option>
+                        <option value="0">Ngừng kinh doanh</option>
                     </select>
                     <span asp-validation-for="Product.Status" class="text-danger"></span>
                 </div>

@@ -26,12 +26,12 @@
                 </div>
                 <div class="mb-4">
                     <label asp-for="Product.Quantity" class="block text-gray-700 font-semibold mb-2">Số lượng</label>
-                    <input asp-for="Product.Quantity" type="number" id="categoryName" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập Email" required>
+                    <input asp-for="Product.Quantity" type="number" id="categoryName" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập Số lượng" required>
                     <span asp-validation-for="Product.Quantity" class="text-danger"></span>
                 </div>
                 <div class="mb-4">
                     <label asp-for="Product.Manufactor" class="block text-gray-700 font-semibold mb-2">Nhà sản xuất</label>
-                    <input asp-for="Product.Manufactor" type="text" id="categoryName" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập Email" required>
+                    <input asp-for="Product.Manufactor" type="text" id="categoryName" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập Nhà sản xuất" required>
                     <span asp-validation-for="Product.Manufactor" class="text-danger"></span>
                 </div>
                 <div class="mb-4">
@@ -40,7 +40,7 @@
                     <span asp-validation-for="Product.Description" class="text-danger"></span>
                 </div>
                 <div class="mb-4">
-                    <label asp-for="Product.ImportPrice" class="block text-gray-700 font-semibold mb-2">Giá nhập</label>
+                    <label asp-for="Product.ImportPrice" class="block text-gray-700 font-semibold mb-2">Giá nhập / Cái</label>
                     <input asp-for="Product.ImportPrice" type="number" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                     <span asp-validation-for="Product.ImportPrice" class="text-danger"></span>
                 </div>
@@ -56,10 +56,15 @@
                     <span asp-validation-for="Product.Notes" class="text-danger"></span>
                 </div>
                 <div class="mb-4">
+                    <label asp-for="Product.ImageUrl" class="block text-gray-700 font-semibold mb-2">Link ảnh đại diện</label>
+                    <input asp-for="Product.ImageUrl" type="text" id="categoryName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="" required>
+                    <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
                     <label asp-for="Product.Status" class="block text-gray-700 font-semibold mb-2">Trạng thái</label>
                     <select asp-for="Product.Status" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                         <option value="1">Kích hoạt</option>
-                        <option value="0">Ban</option>
+                        <option value="0">Ngừng kinh doanh</option>
                     </select>
                     <span asp-validation-for="Product.Status" class="text-danger"></span>
                 </div>

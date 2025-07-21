@@ -13,5 +13,11 @@ namespace WarehouseManagementService.StateMemory
         public static List<Product> ImportRequestProducts = new List<Product>();
 
         public static CreateImportRequest ImportRequest = new CreateImportRequest();
+
+        public static void Clear()
+        {
+            ImportRequestProducts = new List<Product>();
+            ImportRequest = new CreateImportRequest();
+        }
     }
 }
