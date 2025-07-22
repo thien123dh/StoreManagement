@@ -5,7 +5,7 @@
     Layout = null;
 }
 <head>
-    <title>Milk Shop</title>
+    <title>Mini Store</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -28,8 +28,8 @@
                     <label>User Name</label>
                 </div>
                 <div class="input-box">
-                    <input asp-for="user.Password" type="password" />
-                    <span asp-validation-for="user.Password" class="text-danger"></span>
+                    <input class="mr-1" asp-for="user.Password" type="password" />
+                    <span class="text-danger"></span>
                     <label>Password</label>
                 </div>
                 <h6 class="text-danger" style="color:red">@Model.ErrorMessage</h6>

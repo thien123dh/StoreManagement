@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WarehouseManagementData.Models;
 
@@ -25,9 +26,11 @@ public partial class Customer
 
     public int? UpdatedBy { get; set; }
 
+    [ForeignKey("CreatedBy")]
     public virtual User? CreatedByNavigation { get; set; }
 
     public virtual ICollection<Receipt> Receipts { get; set; } = new List<Receipt>();
 
+    [ForeignKey("UpdatedBy")]
     public virtual User? UpdatedByNavigation { get; set; }
 }

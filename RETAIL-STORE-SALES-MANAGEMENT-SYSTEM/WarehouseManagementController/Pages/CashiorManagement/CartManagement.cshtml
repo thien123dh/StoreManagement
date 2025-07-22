@@ -1,0 +1,188 @@
+﻿@page
+@model WarehouseManagementController.Pages.CashiorManagement.CartManagementModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+        <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Shopping Cart</h2>
+
+            <!-- Grid container for cart items and order summary -->
+            <div class="mt-6 sm:mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Courses Container (3/5 of the width) -->
+                <div class="lg:col-span-2 space-y-6">
+                    @foreach (var item in Model.Cart.Items)
+                    {
+                        <div class="w-full mx-auto flex flex-col rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+                            <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:gap-6">
+                                <a href="#" class="flex-shrink-0">
+                                    <img class="h-20 w-20 dark:hidden" src="@Url.Content(item.ImageUrl)" alt="@item.ProductName" />
+                                    <img class="hidden h-20 w-20 dark:block" src="@Url.Content(item.ImageUrl)" alt="@item.ProductName" />
+                                </a>
+
+                                <div class="flex-1 space-y-4">
+                                    <a asp-page="../ProductManagement/ProductDetails" asp-route-id="@item.ProductId"
+                                       class="text-base font-medium text-gray-900 hover:underline dark:text-white">
+                                        @item.ProductName
+                                    </a>
+
+                                    <!-- Số lượng & giá -->
+                                    <div class="flex items-center gap-2">
+                                        <label for="quantity-@item.ProductId" class="text-sm text-gray-700 dark:text-gray-300">Số lượng:</label>
+                                        <input type="number"
+                                               id="quantity-@item.ProductId"
+                                               name="quantity"
+                                               value="@item.Quantity"
+                                               data-product-id="@item.ProductId"
+                                               min="1"
+                                               class="quantity-input w-20 rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-blue-500"
+                                               data-price="@item.Price" />
+                                    </div>
+
+                                    <div class="flex flex-col items-end md:w-32">
+                                        <div>
+                                            <dd class="text-base font-bold text-gray-900 dark:text-white">
+                                                @string.Format("{0:N0} VND", item.Price)
+                                            </dd>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        <button type="button"
+                                                class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
+                                            <svg class="me-1.5 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                 viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
+                                            </svg>
+                                            Thêm vô yêu thích
+                                        </button>
+                                        <a asp-page="./RemoveFromCart" asp-route-id="@item.ProductId">
+                                            <button type="button"
+                                                    class="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500">
+                                                <svg class="me-1.5 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                     viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                          d="M6 18 17.94 6M18 18 6.06 6" />
+                                                </svg>
+                                                Xóa
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div class="flex flex-col items-end md:w-32">
+                                    <div>
+                                        <dd class="text-base font-bold text-gray-900 dark:text-white">@string.Format("{0:N0} VND", item.Price * item.Quantity)</dd>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Order Summary Container (2/5 of the width) -->
+                <div class="lg:col-span-1 space-y-6">
+                    @if (Model.Cart == null || Model.Cart.Items.Count == 0)
+                    {
+                        <p>Your cart is empty.</p>
+                    }
+                    <div class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
+                        <p class="text-xl font-semibold text-gray-900 dark:text-white">Order summary</p>
+
+                        <div class="space-y-4">
+                            <div class="space-y-2">
+                                <dl class="flex items-center justify-between gap-4">
+                                    <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Original price</dt>
+                                    <dd class="text-base font-medium text-gray-900 dark:text-white">@string.Format("{0:N0} VND", Model.Cart.Price())</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        @* @if (!string.IsNullOrEmpty(userId))
+                        { *@
+                            <form method="post" asp-page-handler="Checkout" class="mb-4">
+                                <button type="submit" class="flex w-full items-center justify-center rounded-lg bg-indigo-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                    Proceed to Checkout
+                                </button>
+                            </form>
+                        @* }
+                        else
+                        {
+                            <div class="mb-4">
+                                <a href="../LoginPage" class="flex w-full items-center justify-center rounded-lg bg-indigo-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                    Proceed to Checkout
+                                </a>
+                            </div>
+                        } *@
+                        <div class="flex items-center justify-center gap-2">
+                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">or</span>
+                            <a href="./HomePage" title="" class="inline-flex items-center gap-2 text-sm font-medium text-indigo-700 underline hover:no-underline dark:text-indigo-500">
+                                Tiếp tục mua hàng
+                                <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-7 7m7-7-7-7" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Voucher Section -->
+                    <div class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
+                        <form class="space-y-4">
+                            <div>
+                                <label for="voucher" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Do you have a voucher or gift card?</label>
+                                <input type="text" id="voucher" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="" required />
+                            </div>
+                            <button type="submit" class="flex w-full items-center justify-center rounded-lg bg-indigo-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">Apply Code</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".quantity-input").forEach(input => {
+                input.addEventListener("change", function () {
+                    const productId = this.dataset.productId;
+                    const quantity = this.value;
+
+                    fetch("/CashiorManagement/CartManagement?handler=UpdateQuantity", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: `ProductId=${productId}&Quantity=${quantity}`
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert("Lỗi khi cập nhật số lượng: " + (data.error || 'Không rõ'));
+                            console.error("Chi tiết lỗi:", data.error);
+                        }
+                    })
+                    .catch(err => {
+                        alert("Lỗi mạng khi cập nhật!");
+                        console.error("Lỗi fetch:", err);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

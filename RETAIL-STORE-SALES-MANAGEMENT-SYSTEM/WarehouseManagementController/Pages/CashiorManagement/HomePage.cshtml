@@ -1,0 +1,192 @@
+﻿@page
+@model WarehouseManagementController.Pages.CashiorManagement.HomePageModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Trang mua bán sản phẩm</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="stylesheet" type="text/css" href="~/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="~/icomoon/icomoon.css">
+    <link rel="stylesheet" type="text/css" media="all" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="~/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- script
+    ================================================== -->
+    <script src="~/js/modernizr.js"></script>
+</head>
+<body>
+
+    <div class="preloader-wrapper">
+        <div class="preloader">
+        </div>
+    </div>
+
+    <section class="site-banner jarallax min-height300 padding-large" style="background: url(https://standboothvietnam.com/wp-content/uploads/2023/07/mi.jpg) no-repeat; background-position: center;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-title" style="color:white; background-color:#0a0a0a4d">HỆ THỐNG BÁN HÀNG TIỆN LỢI</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="shopify-grid" style="padding-top:3em">
+        <div class="container">
+            <div class="row">
+                <section id="selling-products" class="col-md-9 product-store">
+                    <div class="container">
+                        <div class="tab-content">
+                            <div id="all" data-tab-content class="active">
+                                <div class="row d-flex flex-wrap">
+                                    @if (Model.Products != null && Model.Products.Items.Any())
+                                    {
+                                        @foreach (var products in Model.Products.Items)
+                                        {
+                                            <div class="product-item col-lg-4 col-md-6 col-sm-6">
+                                                <div class="image-holder">
+                                                    <a asp-page="../ProductManagement/ProductDetails" asp-route-id="@products.Id">
+                                                        <img src="@products.ImageUrl" alt="@products.ImageUrl" class="product-image">
+                                                    </a>
+                                                </div>
+                                                <div class="cart-concern">
+                                                    <form method="get" asp-page="./AddToCart" class="d-flex align-items-center gap-2">
+                                                        <input type="hidden" name="id" value="@products.Id" />
+                                                        <input type="hidden" name="pageIndex" value="@Model.PageIndex" />
+                                                        <input type="hidden" name="searchTerm" value="@Model.Keyword" />
+
+                                                        <input type="number" name="quantity" value="1" min="1"
+                                                               class="form-control form-control-sm text-center"
+                                                               style="width: 50px; height: 32px; padding: 0; line-height: 1.5; font-size: 14px;" />
+
+                                                        <button type="submit"
+                                                                class="btn btn-primary btn-sm d-flex align-items-center justify-content-center"
+                                                                style="height: 50px; font-size: 14px;">
+                                                            ADD TO CART <i class="icon icon-arrow-io ms-1"></i>
+                                                        </button>
+                                                    </form>
+
+
+                                                </div>
+
+                                                <div class="product-detail">
+                                                    <h3 class="product-title">
+                                                        <a asp-page="../ProductManagement/ProductDetails" asp-route-id="@products.Id">@products.Name</a>
+                                                    </h3>
+                                                    <div class="item-price text-primary">@string.Format("{0:N0} VND", products.SellingPrice)</div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>No results found.</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="./CartManagement">Vô giỏ hàng</a>
+
+                        <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
+                            <div class="pagination loop-pagination d-flex justify-content-center">
+                                <!-- Nút Previous -->
+                                <a asp-page="/CashiorManagement/HomePage" asp-route-Keyword="@Model.Keyword" asp-route-PageIndex="@(Model.PageIndex - 1)"
+                                   asp-route-Size="@Model.Size"
+                                   class="pagination-arrow d-flex align-items-center @(Model.PageIndex <= 1 ? "disabled" : "")"
+                                   aria-disabled="@(Model.PageIndex <= 1)">
+                                    <i class="icon icon-arrow-left"></i>
+                                </a>
+
+                                <!-- Số trang -->
+                                @for (int i = 1; i <= Model.Products.TotalPages; i++)
+                                {
+                                    if (i == Model.PageIndex)
+                                    {
+                                        <span aria-current="page" class="page-numbers current">@i</span>
+                                    }
+                                    else
+                                    {
+                                        <a class="page-numbers"
+                                           asp-page="/CashiorManagement/HomePage"
+                                           asp-route-Keyword="@Model.Keyword"
+                                           asp-route-PageIndex="@i"
+                                           asp-route-Size="@Model.Size">@i</a>
+                                    }
+                                }
+
+                                <!-- Nút Next -->
+                                <a asp-page="/CashiorManagement/HomePage"
+                                   asp-route-Keyword="@Model.Keyword"
+                                   asp-route-PageIndex="@(Model.PageIndex + 1)"
+                                   asp-route-Size="@Model.Size"
+                                   class="pagination-arrow d-flex align-items-center @(Model.PageIndex >= Model.Products.TotalPages ? "disabled" : "")"
+                                   aria-disabled="@(Model.PageIndex >= Model.Products.TotalPages)">
+                                    <i class="icon icon-arrow-right"></i>
+                                </a>
+                            </div>
+                        </nav>
+
+
+                    </div>
+                </section>
+
+                <aside class="col-md-3">
+                    <div class="sidebar">
+                        <div class="widgets widget-menu">
+                            <div class="widget-search-bar">
+                                <form role="search" method="get" class="d-flex">
+                                    <input class="search-field" placeholder="Search" type="text" asp-for="Keyword">
+                                    <button class="btn btn-dark"><i class="icon icon-search"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="widgets widget-product-tags">
+                            <h5 class="widget-title">Categories</h5>
+                            <ul class="product-tags sidebar-list list-unstyled">
+                                @if (Model.Categories != null && Model.Categories.Any())
+                                {
+                                    foreach (var category in Model.Categories)
+                                    {
+                                        <li class="tags-item">
+                                            <a asp-page="/CashiorManagement/HomePage"
+                                               asp-route-CategoryId="@category.Id"
+                                               asp-route-PageIndex="1"
+                                               asp-route-Size="@Model.Size">
+                                                @category.Name
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li class="tags-item"><span>No categories found</span></li>
+                                }
+                            </ul>
+                        </div>
+
+                    </div>
+                </aside>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/jquery-1.11.0.min.js"></script>
+    <script src="~/js/plugins.js"></script>
+    <script src="~/js/script.js"></script>
+</body>
+</html>

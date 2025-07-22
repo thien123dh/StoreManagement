@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WarehouseManagementController.VnPayHelper;
 using WarehouseManagementData.Models;
 using WarehouseManagementRepository;
 using WarehouseManagementRepository.Implement;
@@ -10,6 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
@@ -23,12 +31,12 @@ builder.Services.AddDbContext<StoreManagementDbContext>(options
 builder.Services.AddScoped<UnitOfWork>();
 
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
-
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IUserService, UserService>();
-
 builder.Services.AddScoped<ICategoryServices, CategoryServices>();
 
+builder.Services.AddTransient<Utils>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -40,13 +48,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();
-app.UseSession();
 app.MapRazorPages();
 
 app.Run();

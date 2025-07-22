@@ -4,30 +4,33 @@ using Microsoft.EntityFrameworkCore;
 using WarehouseManagementData.Models;
 using WarehouseManagementData.Paging;
 using WarehouseManagementRepository;
-using WarehouseManagementService.StateMemory;
+using WarehouseManagementService.Base;
 
-namespace WarehouseManagementController.Pages.ProductManagement
+namespace WarehouseManagementController.Pages.CashiorManagement
 {
-    public class SearchProductModel : PageModel
+    public class HomePageModel : PageModel
     {
         private readonly UnitOfWork _unitOfWork;
 
         [BindProperty]
         public Paginate<Product> Products { get; set; } = default!;
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
+        public List<Category> Categories { get; set; } = new();
+
+        [BindProperty(SupportsGet = true)]
         public string Keyword { get; set; } = "";
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public int PageIndex { get; set; } = 1;
-
-        public int Size { get; set; } = 100;
-        public SearchProductModel(UnitOfWork unitOfWork)
+        [BindProperty(SupportsGet = true)]
+        public int Size { get; set; } = 9;
+        public HomePageModel(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        private async Task<Paginate<Product>> SearchAsync()
+        private async Task<Paginate<Product>> SearchProdoductAsync()
         {
             var products = await _unitOfWork.ProductRepository.GetPagingListAsync<Product>(
                 selector: p => p,
@@ -42,15 +45,17 @@ namespace WarehouseManagementController.Pages.ProductManagement
             return products;
         }
 
-        public async Task<IActionResult> OnPostRedirectToImportRequestAsync()
+        private async Task<List<Category>> GetAllCategoriesAsync()
         {
-            StateMemory.Clear();
+            var categories = await _unitOfWork.CategoryRepository.GetAllAsync();
 
-            return RedirectToPage("ImportRequest");
+            return categories;
         }
+
         public async Task<IActionResult> OnGetAsync()
         {
-            var product = await SearchAsync();
+            var product = await SearchProdoductAsync();
+            Categories = await GetAllCategoriesAsync();
 
             Products = product;
 
