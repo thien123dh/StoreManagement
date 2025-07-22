@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 using WarehouseManagementData.Models;
@@ -21,6 +22,8 @@ namespace WarehouseManagementController.Pages.ProductManagement
         public List<Product> Products { set; get; } = default!;
         [BindProperty(SupportsGet = true)]
         public string? SelectedId { set; get; } = "";
+        [BindProperty(SupportsGet = true)]
+        public int ImportQuantity { set; get; } = 0;
 
         [BindProperty(SupportsGet = true)]
         public List<SelectListItem> ProductSerialNumbers { set; get; } = default!;
@@ -28,6 +31,18 @@ namespace WarehouseManagementController.Pages.ProductManagement
         public ImportRequestModel(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public void updateDataStateMemory()
+        {
+            StateMemory.ImportRequest = ImportRequest;
+            StateMemory.ImportRequestProducts = Products;
+        }
+
+        public void setDataInit()
+        {
+            ImportRequest = StateMemory.ImportRequest;
+            Products = StateMemory.ImportRequestProducts;
         }
 
         public async Task InitDataAsync()
@@ -38,8 +53,7 @@ namespace WarehouseManagementController.Pages.ProductManagement
                 Value = p.Id.ToString()
             }).ToList();
 
-            ImportRequest = StateMemory.ImportRequest;
-            Products = StateMemory.ImportRequestProducts;
+            setDataInit();
         }
 
         private int? GetLoginUserId()
@@ -68,7 +82,16 @@ namespace WarehouseManagementController.Pages.ProductManagement
 
             foreach (var product in importProducts)
             {
-                product.SerialNumber = $"P{DateTime.Now.ToString("yyMMdd")}-{sequenceNumber++.ToString("00000")}";
+                if (product.Id <= 0)
+                    product.SerialNumber = $"P{DateTime.Now.ToString("yyMMdd")}-{sequenceNumber++.ToString("00000")}";
+
+                product.UpdatedBy = GetLoginUserId();
+                product.UpdatedDateTime = DateTime.Now;
+                if (product.Id <= 0)
+                {
+                    product.CreatedBy = GetLoginUserId();
+                    product.CreatedDateTime = DateTime.Now;
+                }
                 product.Category = null;
             }
 
@@ -84,8 +107,8 @@ namespace WarehouseManagementController.Pages.ProductManagement
             var importProducts = SetDataGetImportProducts();
             if (importProducts.IsNullOrEmpty())
             {
-                    ViewData["ErrorMessage"] = $"Lỗi: Không có sản phẩm nào được thêm vào";
-                    return Page();
+                ViewData["ErrorMessage"] = $"Lỗi: Không có sản phẩm nào được thêm vào";
+                return Page();
             }
 
             var importRequest = new ImportRequest
@@ -97,20 +120,27 @@ namespace WarehouseManagementController.Pages.ProductManagement
                 ImportedSerialNumber = GenerateImportRequestSerialNumber(),
             };
 
+            var createProducts = importProducts.Where(p => p.Id <= 0).ToList();
+            var updateProducts = importProducts.Where(p => p.Id > 0).ToList();
+
+            var updateProductIds = updateProducts.Select(p => p.Id).ToHashSet();
+
+            var dbProducts = _unitOfWork.ProductRepository.Search(p => updateProductIds.Contains(p.Id)).ToList();
+
+            foreach (var product in updateProducts)
+            {
+                var dbProduct = dbProducts.FirstOrDefault(p => p.Id == product.Id);
+
+                product.Quantity = product.Quantity + (dbProduct?.Quantity ?? 0);
+            }
+
             _unitOfWork.ImportRequestRepository.Create(importRequest);
-
-            var createProducts = importProducts.Where(p => p.Id <= 0);
-            //var updateProducts = importProducts.Where(p => p.Id > 0);
-
-            //foreach (var product in updateProducts)
-            //{
-            //    var dbProduct = _unitOfWork.ProductRepository.Get(p => p.Id == product.Id);
-
-            //    product.Quantity = product.Quantity + dbProduct.Quantity;
-            //}
-
             await _unitOfWork.ProductRepository.CreateManyAsync(createProducts).ConfigureAwait(false);
-            //await _unitOfWork.ProductRepository.UpdateManyAsync(updateProducts).ConfigureAwait(false);
+            await _unitOfWork.ProductRepository.UpdateManyAsync(updateProducts).ConfigureAwait(false);
+
+            createProducts.AddRange(updateProducts);
+
+            importProducts = createProducts;
 
             var importDetails = importProducts.Select(p =>
             {
@@ -121,7 +151,7 @@ namespace WarehouseManagementController.Pages.ProductManagement
                     ProductId = p.Id,
                     Quantity = p.Quantity,
                 };
-            }).ToList();    
+            }).ToList();
 
             await _unitOfWork.ImportRequestDetailRepository.CreateManyAsync(importDetails).ConfigureAwait(false);
 
@@ -137,15 +167,18 @@ namespace WarehouseManagementController.Pages.ProductManagement
 
         public async Task<IActionResult> OnPostCreateProductAsync()
         {
-            if (!SelectedId.IsNullOrEmpty())
-            {
-                var product = _unitOfWork.ProductRepository.Get(p => p.Id == int.Parse(SelectedId));
-                product.Quantity = 0;
-                StateMemory.ImportRequestProducts.Add(product);
-                return RedirectToPage("./ImportRequest");
-            }
             StateMemory.ImportRequest = ImportRequest;
 
+            if (!SelectedId.IsNullOrEmpty())
+            {
+                if (StateMemory.ImportRequestProducts.Any(p => p.Id > 0 && p.Id == int.Parse(SelectedId ?? "0")))
+                {
+                    ViewData["ErrorMessage"] = $"Lỗi: Sản phẩm này đã được bạn thêm vào";
+                    return Page();
+                }
+
+                return RedirectToPage("./CreateProduct", new { id = SelectedId });
+            }
             return RedirectToPage("./CreateProduct");
         }
     }

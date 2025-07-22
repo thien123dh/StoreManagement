@@ -109,6 +109,18 @@ namespace WarehouseManagementData.Base
             return await _context.SaveChangesAsync();
         }
 
+        
+        public async Task UpdateManyAsync(IEnumerable<T> entities)
+        {
+            foreach (var entity in entities)
+            {
+                var tracker = _context.Attach(entity);
+                tracker.State = EntityState.Modified;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         public bool Remove(T entity)
         {
             _dbSet.Remove(entity);
