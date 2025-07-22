@@ -6,14 +6,14 @@ using WarehouseManagementData.Paging;
 using WarehouseManagementRepository;
 using WarehouseManagementService.StateMemory;
 
-namespace WarehouseManagementController.Pages.ProductManagement
+namespace WarehouseManagementController.Pages.CashiorManagement
 {
-    public class SearchProductModel : PageModel
+    public class Orders_historyModel : PageModel
     {
         private readonly UnitOfWork _unitOfWork;
 
         [BindProperty]
-        public Paginate<Product> Products { get; set; } = default!;
+        public Paginate<Receipt> Receipts { get; set; } = default!;
 
         [BindProperty]
         public string Keyword { get; set; } = "";
@@ -22,39 +22,42 @@ namespace WarehouseManagementController.Pages.ProductManagement
         public int PageIndex { get; set; } = 1;
 
         public int Size { get; set; } = 100;
-        public SearchProductModel(UnitOfWork unitOfWork)
+
+
+        public Orders_historyModel(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        private async Task<Paginate<Product>> SearchAsync()
+        private async Task<Paginate<Receipt>> SearchAsync()
         {
-            var products = await _unitOfWork.ProductRepository.GetPagingListAsync<Product>(
+            var receipt = await _unitOfWork.ReceiptRepository.GetPagingListAsync<Receipt>(
                 selector: p => p,
-                predicate: p => p.Name.ToLower().Contains(Keyword.ToLower()),
+                predicate: p => p.CustomerName.ToLower().Contains(Keyword.ToLower()),
                 orderBy: o => o.OrderByDescending(p => p.CreatedDateTime),
-                include: i => i.Include(p => p.CreatedByNavigation)
-                .Include(p => p.Category),
+                include: i => i.Include(p => p.ReceiptDetails)
+                .Include(p => p.Customer),
                 page: PageIndex,
                 size: Size
             );
 
-            return products;
+            return receipt;
         }
 
         public async Task<IActionResult> OnPostRedirectToImportRequestAsync()
         {
             StateMemory.Clear();
 
-            return RedirectToPage("ImportRequest");
+            return RedirectToPage("./HomePage");
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            var product = await SearchAsync();
+            var receipt = await SearchAsync();
 
-            Products = product;
+            Receipts = receipt;
 
             return Page();
         }
     }
 }
+
