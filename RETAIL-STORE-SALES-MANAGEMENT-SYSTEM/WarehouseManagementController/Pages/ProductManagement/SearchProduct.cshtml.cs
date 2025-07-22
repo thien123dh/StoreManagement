@@ -14,6 +14,8 @@ namespace WarehouseManagementController.Pages.ProductManagement
 
         [BindProperty]
         public Paginate<Product> Products { get; set; } = default!;
+        [BindProperty]
+        public Paginate<ImportRequest> ImportRequests { get; set; } = default!;
 
         [BindProperty]
         public string Keyword { get; set; } = "";
@@ -27,7 +29,7 @@ namespace WarehouseManagementController.Pages.ProductManagement
             _unitOfWork = unitOfWork;
         }
 
-        private async Task<Paginate<Product>> SearchAsync()
+        private async Task InitDataAsync()
         {
             var products = await _unitOfWork.ProductRepository.GetPagingListAsync<Product>(
                 selector: p => p,
@@ -39,7 +41,19 @@ namespace WarehouseManagementController.Pages.ProductManagement
                 size: Size
             );
 
-            return products;
+            Products = products;
+
+            var importRequests = await _unitOfWork.ImportRequestRepository.GetPagingListAsync<ImportRequest>(
+                selector: p => p,
+                orderBy: o => o.OrderByDescending(p => p.CreatedDateTime),
+                include: i => i.Include(p => p.ImportRequestDetails)
+                                    .ThenInclude(d => d.Product)
+                                .Include(p => p.CreatedByNavigation),
+                page: PageIndex,
+                size: 20
+            );
+
+            ImportRequests = importRequests;
         }
 
         public async Task<IActionResult> OnPostRedirectToImportRequestAsync()
@@ -50,9 +64,7 @@ namespace WarehouseManagementController.Pages.ProductManagement
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            var product = await SearchAsync();
-
-            Products = product;
+            await InitDataAsync().ConfigureAwait(false);
 
             return Page();
         }

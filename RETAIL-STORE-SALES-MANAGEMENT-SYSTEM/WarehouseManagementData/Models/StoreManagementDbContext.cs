@@ -33,8 +33,8 @@ public partial class StoreManagementDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        //=> optionsBuilder.UseSqlServer("Server=(local);User Id=sa;Password=12345;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
-        => optionsBuilder.UseSqlServer("Server=HELLOHAVAN\\SQLEXPRESS;User Id=sa;Password=1234567890;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=(local);User Id=sa;Password=12345;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
+        //=> optionsBuilder.UseSqlServer("Server=HELLOHAVAN\\SQLEXPRESS;User Id=sa;Password=1234567890;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -18,7 +18,7 @@
                     <textarea asp-for="ImportRequest.Description" type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập mô tả"></textarea>
                     <span asp-validation-for="ImportRequest.Description" class="text-danger"></span>
                 </div>
-                
+
                 <h4 class="mb-1 text-l font-semibold text-gray-600 dark:text-gray-300">
                     Danh sách sản phẩm
                 </h4>
@@ -29,7 +29,7 @@
                                 <option value="">---Chọn mã sản phẩm nếu sản phẩm đã có sãn---</option>
                             </select>
                         </div>
-                        <button asp-page-handler="CreateProduct" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
+                        <button type="submit" asp-page-handler="CreateProduct" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
                             Thêm sản phẩm
                         </button>
                     </div>
@@ -50,21 +50,57 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                            @foreach (var item in Model.Products)
+                            @for (int i = 0; i < Model.Products.Count; i++)
                             {
                                 <tr class="text-gray-700 dark:text-gray-400">
-                                    <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Name)</td>
-                                    <td class="px-4 py-3 text-sm">@(item.SerialNumber ?? "Tự động tạo")</td>
-                                    <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Manufactor)</td>
                                     <td class="px-4 py-3 text-sm">
-                                        <input asp-for="@item.Quantity" type="decimal" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập số lượng nhập vào kho" required>
+                                        @Html.DisplayFor(model => model.Products[i].Name)
+                                        <input type="hidden" asp-for="Products[i].Name" />
                                     </td>
-                                    <td class="px-4 py-3 text-sm">@string.Format("{0:N0} VND", item.SellingPrice)</td>
-                                    <td class="px-4 py-3 text-sm">@string.Format("{0:N0} VND", item.ImportPrice)</td>
-                                    <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Category.Name)</td>
-                                    <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.StatusName)</td>
+
+                                    <td class="px-4 py-3 text-sm">
+                                        @(Model.Products[i].SerialNumber ?? "Tự động tạo")
+                                        <input type="hidden" asp-for="Products[i].SerialNumber" />
+                                    </td>
+
+                                    <td class="px-4 py-3 text-sm">
+                                        @Html.DisplayFor(model => model.Products[i].Manufactor)
+                                        <input type="hidden" asp-for="Products[i].Manufactor" />
+                                    </td>
+
+                                    <td class="px-4 py-3 text-sm">
+                                        <input readonly asp-for="Products[i].Quantity"
+                                               class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                               placeholder="Nhập số lượng nhập vào kho"
+                                               required />
+                                        <span asp-validation-for="Products[i].Quantity" class="text-red-500 text-sm"></span>
+                                    </td>
+
+                                    <td class="px-4 py-3 text-sm">
+                                        @string.Format("{0:N0} VND", Model.Products[i].SellingPrice)
+                                        <input type="hidden" asp-for="Products[i].SellingPrice" />
+                                    </td>
+
+                                    <td class="px-4 py-3 text-sm">
+                                        @string.Format("{0:N0} VND", Model.Products[i].ImportPrice)
+                                        <input type="hidden" asp-for="Products[i].ImportPrice" />
+                                    </td>
+
+                                    <td class="px-4 py-3 text-sm">
+                                        @Html.DisplayFor(model => model.Products[i].Category.Name)
+                                        <input type="hidden" asp-for="Products[i].Category.Id" />
+                                        <input type="hidden" asp-for="Products[i].Category.Name" />
+                                    </td>
+
+                                    <td class="px-4 py-3 text-sm">
+                                        @Html.DisplayFor(model => model.Products[i].StatusName)
+                                        <input type="hidden" asp-for="Products[i].StatusName" />
+                                    </td>
+
                                     <td class="px-4 py-3">
-                                        <button asp-page-handler="RemoveImportProduct" asp-route-index="@Model.Products.IndexOf(item)" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-red-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                                        <button asp-page-handler="RemoveImportProduct"
+                                                asp-route-index="@i"
+                                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-red-600 rounded-lg hover:bg-red-100">
                                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                                             </svg>
@@ -73,6 +109,7 @@
                                 </tr>
                             }
                         </tbody>
+
                     </table>
                 </div>
 

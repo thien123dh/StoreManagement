@@ -18,7 +18,7 @@ namespace WarehouseManagementController.Pages.CashiorManagement
             this._unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             // Lấy dữ liệu từ Session
             var cartData = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");

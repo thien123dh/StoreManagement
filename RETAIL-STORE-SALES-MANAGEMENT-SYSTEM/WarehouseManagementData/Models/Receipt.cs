@@ -28,10 +28,12 @@ public partial class Receipt
 
     public string? CustomerName { get; set; }
 
-    [ForeignKey("CreatedBy")]
+    [ForeignKey(nameof(CreatedBy))]
     public virtual User? CreatedByNavigation { get; set; }
 
     public virtual Customer? Customer { get; set; }
 
     public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; } = new List<ReceiptDetail>();
+
+    public virtual string ProductSerialNumbers => string.Join(",", ReceiptDetails.Select(r => r.Product?.SerialNumber).ToList());
 }
