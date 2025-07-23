@@ -2,6 +2,14 @@
     @RenderSection("PageStyles", required: false)
 }
 @{
+    var role = Context.Session.GetInt32("RoleId");
+    if (role == null)
+    {
+        <script>
+            window.location.href = '/LoginPage';
+        </script>
+    }
+
     var currentPath = Context.Request.Path.ToString();
     var isActiveProduct = currentPath.Contains("ProductManagement");
     var activeProductClass = isActiveProduct ? "text-gray-400 bg-gray-200" : "text-gray-300 hover:bg-gray-100 hover:text-gray-700";
@@ -13,6 +21,8 @@
     var activeCategoryClass = isActiveCategory ? "text-gray-400 bg-gray-200" : "text-gray-300 hover:bg-gray-100 hover:text-gray-700";
     var isActiveDashboard = currentPath.Contains("Dashboard");
     var activeDashboardClass = isActiveDashboard ? "text-gray-400 bg-gray-200" : "text-gray-300 hover:bg-gray-100 hover:text-gray-700";
+    var isActiveHomePage = currentPath.Contains("CashiorManagement");
+    var activeHomePageClass = isActiveHomePage || (isActiveProduct && role == 2) ? "text-gray-400 bg-gray-200" : "text-gray-300 hover:bg-gray-100 hover:text-gray-700";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +40,7 @@
         <aside class="sidebar w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in bg-blue-700">
             <div class="sidebar-header flex items-center justify-center py-4">
                 <div class="inline-flex">
-                    <a href="/Admin">
+                    <a href="/CashiorManagement/HomePage">
                         <img src="https://png.pngtree.com/png-vector/20220521/ourmid/pngtree-warehouse-icon-bussiness-logostics-shipping-garage-store-gate-vector-png-image_46481112.jpg" alt="logo" class='w-24 h-24 object-cover rounded-full mx-auto' />
                     </a>
                 </div>
@@ -38,8 +48,8 @@
             <div class="sidebar-content px-4 py-6">
                 <ul class="flex flex-col w-full">
                     <li class="my-px">
-                        <a href="/Admin"
-                           class="flex flex-row items-center h-10 px-3 rounded-lg @activeDashboardClass">
+                        <a @(role == 3 ? "hidden" : "") href="/CashiorManagement/HomePage"
+                           class="flex flex-row items-center h-10 px-3 rounded-lg @activeHomePageClass">
                             <span class="flex items-center justify-center text-lg text-gray-400">
                                 <svg fill="none"
                                      stroke-linecap="round"
@@ -51,13 +61,13 @@
                                     <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                 </svg>
                             </span>
-                            <span class="ml-3">Thống kê</span>
+                            <span class="ml-3">Cửa Hàng</span>
                         </a>
                     </li>
-                    <li class="my-px">
+                    <li @(role != 1 ? "hidden" : "") class="my-px">
                         <span class="flex font-medium text-sm text-gray-300 px-4 my-4 uppercase">Nhân sự</span>
                     </li>
-                    <li class="my-px">
+                    <li @(role != 1 ? "hidden" : "") class="my-px">
                         <a href="/UserManagement/SearchUser"
                            class="flex flex-row items-center h-10 px-3 rounded-lg @activeUserClass">
                             <span class="flex items-center justify-center text-lg text-gray-400">
@@ -78,7 +88,7 @@
                     <li class="my-px">
                         <span class="flex font-medium text-sm text-gray-300 px-4 my-4 uppercase">Sản phẩm</span>
                     </li>
-                    <li class="my-px">
+                    <li @(role != 1 && role != 3 ? "hidden" : "") class="my-px">
                         <a href="/CategoryProduct/Category"
                            class="flex flex-row items-center h-10 px-3 rounded-lg @activeCategoryClass">
                             <span class="flex items-center justify-center text-lg text-gray-400">
@@ -95,7 +105,7 @@
                             <span class="ml-3">Quản lý danh mục</span>
                         </a>
                     </li>
-                    <li class="my-px">
+                    <li @(role != 1 && role != 3 ? "hidden" : "") class="my-px">
                         <a href="/ProductManagement/SearchProduct"
                            class="flex flex-row items-center h-10 px-3 rounded-lg @activeProductClass">
                             <span class="flex items-center justify-center text-lg text-gray-400">
@@ -208,6 +218,13 @@
                     @ViewData["ErrorMessage"]
                 </div>
             }
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
             @RenderBody()
     </div>
     <script>

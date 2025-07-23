@@ -89,6 +89,12 @@ namespace WarehouseManagementData.Base
             await _context.SaveChangesAsync();
         }
 
+        public void CreateMany(IEnumerable<T> entities)
+        {
+            _dbSet.AddRangeAsync(entities);
+            _context.SaveChanges();
+        }
+
         public async Task<int> CreateAsync(T entity)
         {
             _dbSet.Add(entity);
@@ -109,7 +115,17 @@ namespace WarehouseManagementData.Base
             return await _context.SaveChangesAsync();
         }
 
-        
+        public void UpdateMany(IEnumerable<T> entities)
+        {
+            foreach (var entity in entities)
+            {
+                var tracker = _context.Attach(entity);
+                tracker.State = EntityState.Modified;
+            }
+
+            _context.SaveChanges();
+        }
+
         public async Task UpdateManyAsync(IEnumerable<T> entities)
         {
             foreach (var entity in entities)

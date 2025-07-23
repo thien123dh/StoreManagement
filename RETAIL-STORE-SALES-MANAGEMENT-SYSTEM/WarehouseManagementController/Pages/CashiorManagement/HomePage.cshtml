@@ -1,6 +1,11 @@
 ﻿@page
 @model WarehouseManagementController.Pages.CashiorManagement.HomePageModel
 @{
+    var role = HttpContext.Session.GetInt32("RoleId");
+
+    if (role == null)
+        RedirectToPage("/LoginPage");
+
     Layout = null;
 }
 <!DOCTYPE html>
@@ -75,7 +80,7 @@
                                                         <button type="submit"
                                                                 class="btn btn-primary btn-sm d-flex align-items-center justify-content-center"
                                                                 style="height: 50px; font-size: 14px;">
-                                                            ADD TO CART <i class="icon icon-arrow-io ms-1"></i>
+                                                            Thêm vào giỏ hàng <i class="icon icon-arrow-io ms-1"></i>
                                                         </button>
                                                     </form>
 
@@ -98,9 +103,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <a href="./CartManagement">Vô giỏ hàng</a>
-
                         <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
                             <div class="pagination loop-pagination d-flex justify-content-center">
                                 <!-- Nút Previous -->
@@ -154,8 +156,23 @@
                                 </form>
                             </div>
                         </div>
+                        <div class="widgets mb-4 widget-product-tags">
+                            <h5 class="widget-title">Quản lý</h5>
+                            <ul class="product-tags sidebar-list list-unstyled">
+                                <li class="tags-item">
+                                    <a asp-page="CartManagement">
+                                        Giỏ Hàng (@Model.CartSize)
+                                    </a>
+                                </li>
+                                <li class="tags-item">
+                                    <a asp-page="@(role == 2 ? "/ReceiptManagement/SearchReceipt" : "/ProductManagement/SearchProduct")">
+                                        Trang quản lý
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="widgets widget-product-tags">
-                            <h5 class="widget-title">Categories</h5>
+                            <h5 class="widget-title">Danh mục sản phẩm</h5>
                             <ul class="product-tags sidebar-list list-unstyled">
                                 @if (Model.Categories != null && Model.Categories.Any())
                                 {

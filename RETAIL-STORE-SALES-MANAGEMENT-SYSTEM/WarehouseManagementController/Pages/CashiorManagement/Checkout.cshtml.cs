@@ -6,20 +6,27 @@ using WarehouseManagementController.SessionHelper;
 using WarehouseManagementData.Models;
 using WarehouseManagementService.Implement;
 using WarehouseManagementController.VnPayHelper;
+using WarehouseManagementService.Dto.Customer;
+using WarehouseManagementService.Interface;
 
 namespace WarehouseManagementController.Pages.CashiorManagement
 {
     public class CheckoutModel : PageModel
     {
         private readonly StoreManagementDbContext _context;
+        private readonly IOrderService _orderService;
         private readonly IConfiguration _configuration;
         private readonly Utils _utils;
 
-        public CheckoutModel(StoreManagementDbContext context, IConfiguration configuration, Utils utils)
+        public CheckoutModel(StoreManagementDbContext context, 
+            IConfiguration configuration, 
+            Utils utils, 
+            IOrderService orderService)
         {
             _context = context;
             _configuration = configuration;
             _utils = utils;
+            _orderService = orderService;
         }
 
         public int UserID { get; set; }
@@ -33,7 +40,7 @@ namespace WarehouseManagementController.Pages.CashiorManagement
             {
                 UserID = userIdFromSession.Value;
             }
-            TempData["CartData"] = cartData;
+            TempData["CartData"] = cartData ?? new ShoppingCart();
             TempData["TotalPrice"] = totalPrice;
             TempData["TotalAmount"] = totalAmount;
 
@@ -44,14 +51,40 @@ namespace WarehouseManagementController.Pages.CashiorManagement
         public Receipt Order { get; set; } = default!;
 
         [BindProperty]
+        public OrderInfo OrderInfo { get; set; } = new OrderInfo();
+
+        [BindProperty]
         public string Cart { get; set; } = string.Empty;
+
+        private IActionResult ProcessCashPayment()
+        {
+            var customerInfo = OrderInfo;
+            var shopingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+
+            var result = _orderService.ProcessPaymentMethod(customerInfo, shopingCart, GetLoginUserId());
+            TempData["SuccessMessage"] = $"Thanh toán hóa đơn {result.ReceiptSerialNumber} thành công";
+            ClearSession();
+            return RedirectToPage("/ReceiptManagement/SearchReceipt");
+        }
+
+        private void ClearSession()
+        {
+            HttpContext.Session.Remove("Cart");
+            HttpContext.Session.Remove("TotalAmount");
+            HttpContext.Session.Remove("TotalPrice");
+        }
+
+        private int? GetLoginUserId()
+        {
+            return HttpContext.Session.GetInt32("UserID");
+        }
 
         public IActionResult OnPost()
         {
             var cartData = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
             var totalAmount = HttpContext.Session.GetObjectFromJson<decimal>("TotalAmount");
             var totalPrice = HttpContext.Session.GetObjectFromJson<decimal>("TotalPrice");
-            var userIdFromSession = HttpContext.Session.GetInt32("CashierId");
+            var userIdFromSession = GetLoginUserId();
 
             if (userIdFromSession.HasValue)
             {
@@ -70,6 +103,12 @@ namespace WarehouseManagementController.Pages.CashiorManagement
                 return Page();
             }
 
+            if (OrderInfo.PaymentMethod == 1) //Cashpayment
+            {
+                return ProcessCashPayment();
+            }
+            //VNPAY
+            HttpContext.Session.SetObjectAsJson("OrderInfo", OrderInfo);
             string tmnCode = _configuration["VNPAY:TmnCode"];
             string hashSecret = _configuration["VNPAY:HashSecret"];
             string vnpUrl = _configuration["VNPAY:VnpUrl"];
