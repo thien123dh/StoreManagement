@@ -34,6 +34,7 @@ builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICategoryServices, CategoryServices>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddTransient<Utils>();
 builder.Services.AddHttpContextAccessor();

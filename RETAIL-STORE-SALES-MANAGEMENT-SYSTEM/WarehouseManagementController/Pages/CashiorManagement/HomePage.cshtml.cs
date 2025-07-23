@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using WarehouseManagementController.SessionHelper;
 using WarehouseManagementData.Models;
 using WarehouseManagementData.Paging;
 using WarehouseManagementRepository;
 using WarehouseManagementService.Base;
+using WarehouseManagementService.Implement;
 
 namespace WarehouseManagementController.Pages.CashiorManagement
 {
@@ -12,6 +14,8 @@ namespace WarehouseManagementController.Pages.CashiorManagement
     {
         private readonly UnitOfWork _unitOfWork;
 
+        [BindProperty]
+        public int CartSize { get; set; } = 0;
         [BindProperty]
         public Paginate<Product> Products { get; set; } = default!;
 
@@ -34,7 +38,7 @@ namespace WarehouseManagementController.Pages.CashiorManagement
         {
             var products = await _unitOfWork.ProductRepository.GetPagingListAsync<Product>(
                 selector: p => p,
-                predicate: p => p.Name.ToLower().Contains(Keyword.ToLower()),
+                predicate: p => p.Name.ToLower().Contains(Keyword.ToLower()) || p.SerialNumber.ToLower().Contains(Keyword.ToLower()),
                 orderBy: o => o.OrderByDescending(p => p.CreatedDateTime),
                 include: i => i.Include(p => p.CreatedByNavigation)
                 .Include(p => p.Category),
@@ -54,8 +58,17 @@ namespace WarehouseManagementController.Pages.CashiorManagement
 
         public async Task<IActionResult> OnGetAsync()
         {
+            var role = HttpContext.Session.GetInt32("RoleId");
+            if (role == null)
+            {
+                return RedirectToPage("/LoginPage");
+            }
+
             var product = await SearchProdoductAsync();
             Categories = await GetAllCategoriesAsync();
+            var carts = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart") ?? new ShoppingCart();
+
+            CartSize = carts?.Items?.Count() ?? 0;
 
             Products = product;
 

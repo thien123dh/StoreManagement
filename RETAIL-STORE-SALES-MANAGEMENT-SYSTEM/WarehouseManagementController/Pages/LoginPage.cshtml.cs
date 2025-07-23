@@ -34,8 +34,12 @@ namespace WarehouseManagementController.Pages
         {
             if (role == RoleConstant.ADMIN)
                 return RedirectToPage("./UserManagement/SearchUser");
+            else if (role == RoleConstant.IMPORTER)
+                return RedirectToPage("./ProductManagement/SearchProduct");
+            else if (role == RoleConstant.CASHIER)
+                return RedirectToPage("./CashiorManagement/HomePage");
 
-            return RedirectToPage("./ProductManagement/SearchProduct");
+            return Page();
         }
 
         public IActionResult OnPost()

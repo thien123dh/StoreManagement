@@ -17,6 +17,8 @@ namespace WarehouseManagementService.Dto.Request
 
         public string Manufactor { get; set; }
 
+        public int Quantity { set; get; }
+
         public decimal SellingPrice { get; set; }
 
         public decimal? ImportPrice { get; set; }

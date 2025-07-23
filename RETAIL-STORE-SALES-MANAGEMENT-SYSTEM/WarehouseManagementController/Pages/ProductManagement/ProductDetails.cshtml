@@ -1,6 +1,7 @@
 ﻿@page "{id:int}"
 @model WarehouseManagementController.Pages.ProductManagement.ProductDetailsModel
 @{
+    var role = HttpContext.Session.GetInt32("RoleId");
     ViewData["Title"] = "Sản phẩm";
 }
 
@@ -61,13 +62,10 @@
                 </div>
 
                 <div class="flex justify-end space-x-2 mb-4">
-                    <a asp-page="SearchProduct" class="px-4 py-2 font-semibold leading-tight text-white bg-red-600 rounded-full hover:bg-blue-700">
+                    <a asp-page="@(role == 2 ? "/CashiorManagement/HomePage" : "SearchProduct")" class="px-4 py-2 font-semibold leading-tight text-white bg-red-600 rounded-full hover:bg-blue-700">
                         Quay lại
                     </a>
-                    <a asp-page="AddProduct" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
-                        Thêm sản phẩm
-                    </a>
-                    <a asp-page="UpdateProduct" asp-route-id="@Model.Id" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
+                    <a hidden="@(role == 2 ? "hidden" : null)" asp-page="UpdateProduct" asp-route-id="@Model.Id" class="px-4 py-2 font-semibold leading-tight text-white bg-blue-600 rounded-full hover:bg-blue-700">
                         Chỉnh sửa
                     </a>
                 </div>

@@ -7,9 +7,6 @@
     ShoppingCart cartData = TempData["CartData"] as ShoppingCart;
     var totalAmount = (decimal?)TempData["TotalAmount"];
     var totalPrice = (decimal?)TempData["TotalPrice"];
-
-
-    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -29,15 +26,6 @@
 
 
                 <form method="post">
-                    <!-- Payment Method  -->
-                    <div class="mb-6">
-                        <label for="payment-method" class="block text-lg font-medium text-gray-700">Payment Method</label>
-                        <select id="payment-method" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option value="vnpay">VNPAY</option>
-
-                        </select>
-                    </div>
-
                     <!-- Vnpay and Momo Form -->
                     <div id="vnpay-form" class="hidden">
                         <p class="text-sm text-gray-700">You will be redirected to the VNPAY gateway to complete your payment.</p>
@@ -77,18 +65,35 @@
                         <span>@string.Format("{0:N0} VND", @totalPrice.Value)</span>
                     </div>
                 </div>
-                <p class="text-sm text-gray-500 mt-4">By completing your purchase you agree to these Terms of Service.</p>
+                <p class="text-sm text-gray-500 mt-4">Nhập thông tin đơn hàng</p>
                 <form method="post">
-                    <input type="hidden" asp-for="UserID" />
-
                     <div>
-                        <label for="amount">Money Pay:</label>
+                        <label for="amount">Tổng tiền:</label>
                         <!-- Đảm bảo giá trị này là số nguyên khi gửi đi -->
                         <input id="amount" name="Amount" value="@string.Format("{0:N0} VND", @totalPrice.Value)" readonly />
                     </div>
-
-                    <button type="submit" class="flex w-full items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-700 dark:hover:bg-red-700 dark:focus:ring-blue-800">
-                        Pay with VNPAY
+                    <div>
+                        <label for="amount">Số điện thoại khách hàng (Không bắt buộc)</label>
+                        <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập số điện thoại" asp-for="@Model.OrderInfo.CustomerContactNumber" />
+                    </div>
+                    <div>
+                        <label for="amount">Tên khách hàng (Không bắt buộc)</label>
+                        <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập tên khách hàng" asp-for="@Model.OrderInfo.CustomerName" />
+                    </div>
+                    <div>
+                        <label for="amount">Ghi chú đơn hàng (Không bắt buộc)</label>
+                        <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập ghi chú ngắn" asp-for="@Model.OrderInfo.Notes" />
+                    </div>
+                    <!-- Payment Method  -->
+                    <div class="mb-6 mt-4">
+                        <label for="payment-method" class="block text-lg font-medium text-gray-700">Phương thức thanh toán</label>
+                        <select asp-for="@Model.OrderInfo.PaymentMethod" id="paymentMethod" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option value="1">Thanh toán tiền mặt</option>
+                            <option value="2">VNPAY</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="mt-4 flex w-full items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-700 dark:hover:bg-red-700 dark:focus:ring-blue-800">
+                        Thanh toán
                     </button>
                 </form>
 

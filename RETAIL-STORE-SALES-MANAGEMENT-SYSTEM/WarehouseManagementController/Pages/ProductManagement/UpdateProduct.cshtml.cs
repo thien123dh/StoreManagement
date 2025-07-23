@@ -77,6 +77,7 @@ namespace WarehouseManagementController.Pages.ProductManagement
             product.ImageUrl = Product.ImageUrl;
             product.SellingPrice = Product.SellingPrice;
             product.UpdatedDateTime = DateTime.Now;
+            product.Quantity = Product.Quantity;
 
             _unitOfWork.ProductRepository.Update(product);
 
