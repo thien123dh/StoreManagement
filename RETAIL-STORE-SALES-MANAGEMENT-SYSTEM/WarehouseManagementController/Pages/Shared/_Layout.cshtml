@@ -65,6 +65,23 @@
                         </a>
                     </li>
                     <li @(role != 1 ? "hidden" : "") class="my-px">
+                        <a href="/Dashboard"
+                           class="flex flex-row items-center h-10 px-3 rounded-lg @activeDashboardClass">
+                            <span class="flex items-center justify-center text-lg text-gray-400">
+                                <svg fill="none"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     class="h-6 w-6">
+                                    <path d="M3 3h18v18H3V3z" />
+                                </svg>
+                            </span>
+                            <span class="ml-3">Dashboard</span>
+                        </a>
+                    </li>
+                    <li @(role != 1 ? "hidden" : "") class="my-px">
                         <span class="flex font-medium text-sm text-gray-300 px-4 my-4 uppercase">Nhân sự</span>
                     </li>
                     <li @(role != 1 ? "hidden" : "") class="my-px">
