@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WarehouseManagementData.Models;
 using WarehouseManagementRepository;
@@ -142,9 +143,33 @@ namespace WarehouseManagementService.Implement
         {
             try
             {
-                category.UpdatedDateTime = DateTime.Now;
+                // Lấy CategoryId hiện tại cao nhất
+                var latestCategory = _unitOfWork.CategoryRepository
+                    .GetAll() // giả sử bạn có hàm GetAll trả về IQueryable<Category>
+                    .Where(c => c.CategoryId != null)
+                    .OrderByDescending(c => c.CategoryId)
+                    .FirstOrDefault();
+
+                int nextNumber = 1;
+
+                if (latestCategory != null && !string.IsNullOrEmpty(latestCategory.CategoryId))
+                {
+                    var numericPart = Regex.Match(latestCategory.CategoryId, @"\d+").Value;
+                    if (int.TryParse(numericPart, out int parsedNumber))
+                    {
+                        nextNumber = parsedNumber + 1;
+                    }
+                }
+
+                category.CategoryId = $"CA{nextNumber.ToString("D5")}";
                 category.CreatedDateTime = DateTime.Now;
+                category.UpdatedDateTime = DateTime.Now;
+                category.UpdatedBy = 2;
+                category.CreatedBy = 2;
+                category.Status = 1;
+
                 int result = await _unitOfWork.CategoryRepository.CreateAsync(category);
+
                 if (result > 0)
                 {
                     return new BusinessResult(1, "success");
@@ -159,6 +184,7 @@ namespace WarehouseManagementService.Implement
                 return new BusinessResult(-4, ex.Message);
             }
         }
+
 
         public async Task<IBusinessResult> Search(string searchTerm, int page, int size)
         {
@@ -190,9 +216,19 @@ namespace WarehouseManagementService.Implement
         {
             try
             {
-                category.CreatedDateTime = DateTime.Now;
-                category.UpdatedDateTime = DateTime.Now;
-                int result = await _unitOfWork.CategoryRepository.UpdateAsync(category);
+                // Lấy category gốc từ DB
+                var existingCategory = await _unitOfWork.CategoryRepository.GetByIdAsync(category.Id);
+                if (existingCategory == null)
+                {
+                    return new BusinessResult(2, "Category not found");
+                }
+
+                // Chỉ cập nhật những thuộc tính cần thiết
+                existingCategory.Name = category.Name;
+                existingCategory.UpdatedDateTime = DateTime.Now;
+
+                // Cập nhật
+                int result = await _unitOfWork.CategoryRepository.UpdateAsync(existingCategory);
                 if (result > 0)
                 {
                     return new BusinessResult(1, "success");
@@ -207,5 +243,6 @@ namespace WarehouseManagementService.Implement
                 return new BusinessResult(-4, ex.Message);
             }
         }
+
     }
 }
