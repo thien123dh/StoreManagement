@@ -20,4 +20,8 @@
     <ProjectReference Include="..\WarehouseManagementService\WarehouseManagementService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\imageProduct\" />
+  </ItemGroup>
+
 </Project>

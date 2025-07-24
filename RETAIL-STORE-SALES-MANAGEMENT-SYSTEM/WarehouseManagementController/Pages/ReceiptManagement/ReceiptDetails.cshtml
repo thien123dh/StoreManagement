@@ -1,0 +1,87 @@
+﻿@page
+@model WarehouseManagementController.Pages.ReceiptManagement.ReceiptDetailsModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hóa đơn bán hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+
+    <div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
+            <div>
+                <h2 class="text-2xl font-bold">HÓA ĐƠN BÁN HÀNG</h2>
+                <p class="text-sm text-gray-500">@Model.Receipt.CreatedDateTime</p>
+            </div>
+            <div class="text-right">
+                <p class="font-semibold">@Model.Receipt.ReceiptSerialNumber</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <h3 class="font-semibold text-lg mb-2">Thông tin khách hàng</h3>
+            <p><span class="font-medium">Họ tên:</span> @Model.Receipt.CustomerName</p>
+            <p><span class="font-medium">Số điện thoại:</span> @Model.Receipt.Customer.ContactNumber</p>
+            <p><span class="font-medium">Địa chỉ:</span> @Model.Receipt.Address</p>
+        </div>
+
+        <div class="mb-6 overflow-x-auto">
+            <h3 class="font-semibold text-lg mb-2">Danh sách sản phẩm</h3>
+            <table class="min-w-full text-sm border border-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 border">STT</th>
+                        <th class="px-4 py-2 border">Hình ảnh</th>
+                        <th class="px-4 py-2 border text-left">Tên sản phẩm</th>
+                        <th class="px-4 py-2 border text-right">Số lượng</th>
+                        <th class="px-4 py-2 border text-right">Đơn giá</th>
+                        <th class="px-4 py-2 border text-right">Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 1;
+                        foreach (var detail in Model.Receipt.ReceiptDetails)
+                        {
+                            <tr class="border-t">
+                                <td class="px-4 py-2 border text-center">@index</td>
+                                <td class="px-4 py-2 border text-center">
+                                    <img style="height:50px;width:50px" src="@detail.Product.ImageUrl" alt="Ảnh SP">
+                                </td>
+                                <td class="px-4 py-2 border">@detail.Product.Name</td>
+                                <td class="px-4 py-2 border text-right">@detail.Quantity</td>
+                                <td class="px-4 py-2 border text-right">@string.Format("{0:N0} VND", detail.Product.SellingPrice)</td>
+                                <td class="px-4 py-2 border text-right">@string.Format("{0:N0} VND", (detail.Quantity * detail.Product.SellingPrice))</td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-right text-lg font-semibold mt-4">
+            Tổng tiền: <span class="text-red-600">@string.Format("{0:N0} VND", @Model.Receipt.TotalPrice)</span>
+        </div>
+
+        <div class="text-center mt-6 text-sm text-gray-500">
+            Cảm ơn quý khách đã mua hàng!
+        </div>
+
+        <div class="flex justify-between mt-8">
+            <a href="./SearchReceipt" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded">
+                ← Trở về
+            </a>
+            <button onclick="window.print()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                🖨️ In hóa đơn
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>
