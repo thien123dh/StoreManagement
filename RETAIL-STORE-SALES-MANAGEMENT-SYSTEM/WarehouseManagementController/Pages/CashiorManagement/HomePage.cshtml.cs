@@ -41,7 +41,7 @@ namespace WarehouseManagementController.Pages.CashiorManagement
                 predicate: p => p.Name.ToLower().Contains(Keyword.ToLower()) || p.SerialNumber.ToLower().Contains(Keyword.ToLower()),
                 orderBy: o => o.OrderByDescending(p => p.CreatedDateTime),
                 include: i => i.Include(p => p.CreatedByNavigation)
-                .Include(p => p.Category),
+                               .Include(p => p.Category),
                 page: PageIndex,
                 size: Size
             );

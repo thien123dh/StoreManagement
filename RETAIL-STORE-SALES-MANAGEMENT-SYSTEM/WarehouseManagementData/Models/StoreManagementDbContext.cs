@@ -33,8 +33,8 @@ public partial class StoreManagementDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        //=> optionsBuilder.UseSqlServer("Server=(local);User Id=sa;Password=12345;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
-        => optionsBuilder.UseSqlServer("Server=HELLOHAVAN\\SQLEXPRESS;User Id=sa;Password=1234567890;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=(local);User Id=sa;Password=12345;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
+        //=> optionsBuilder.UseSqlServer("Server=HELLOHAVAN\\SQLEXPRESS;User Id=sa;Password=1234567890;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -98,21 +98,6 @@ public partial class StoreManagementDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("Product_PK");
 
             entity.ToTable("Product");
-
-            entity.Property(e => e.CreatedDateTime).HasPrecision(0);
-            entity.Property(e => e.Description).HasMaxLength(1000);
-            entity.Property(e => e.ImportPrice).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.Manufactor).HasMaxLength(500);
-            entity.Property(e => e.ManufactureDateTime).HasPrecision(0);
-            entity.Property(e => e.Name).HasMaxLength(500);
-            entity.Property(e => e.Notes).HasMaxLength(100);
-            entity.Property(e => e.Quantity).HasDefaultValue(0);
-            entity.Property(e => e.SellingPrice).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.SerialNumber)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-            entity.Property(e => e.Status).HasDefaultValue((short)1);
-            entity.Property(e => e.UpdatedDateTime).HasPrecision(0);
         });
 
         modelBuilder.Entity<Receipt>(entity =>
