@@ -77,21 +77,21 @@ namespace WarehouseManagementController.Pages.ProductManagement
 
         public async Task<IActionResult> OnPostImportProductAsync()
         {
-            // Nếu cả link ảnh và file ảnh đều null => lỗi
+            // Nếu cả hai đều null => lỗi
             if (ImageFile == null && string.IsNullOrWhiteSpace(Product.ImageUrl))
             {
                 ModelState.AddModelError("Product.ImageUrl", "Bạn cần cung cấp link ảnh hoặc chọn ảnh từ máy.");
                 return Page();
             }
 
-            if (!ModelState.IsValid)
+            // Ưu tiên link ảnh nếu có
+            if (!string.IsNullOrWhiteSpace(Product.ImageUrl))
             {
-                return Page();
+                // Không làm gì, giữ nguyên link
             }
-
-            // Nếu có file ảnh => lưu file và cập nhật ImageUrl
-            if (ImageFile != null)
+            else if (ImageFile != null)
             {
+                // Nếu không có link thì mới xử lý upload
                 var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "imageProduct");
                 var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -101,19 +101,18 @@ namespace WarehouseManagementController.Pages.ProductManagement
                     await ImageFile.CopyToAsync(fileStream);
                 }
 
-                // Gán lại link tương đối để dùng trong view
                 Product.ImageUrl = "/imageProduct/" + uniqueFileName;
             }
+            // Nếu không có file mà chỉ có link => giữ nguyên Product.ImageUrl đã nhập
 
-            // Lấy sản phẩm cũ nếu có, không thì tạo mới
+            // Nếu là sửa thì lấy sản phẩm cũ, không thì tạo mới
             var product = Id != null
                 ? _unitOfWork.ProductRepository.Get(p => p.Id == Id)
                 : new Product();
 
-            // Lấy danh sách category (dùng cho Category navigation)
             var categories = _unitOfWork.CategoryRepository.GetAll();
 
-            // Gán lại thông tin sản phẩm
+            // Cập nhật sản phẩm
             product.Name = Product.Name;
             product.Manufactor = Product.Manufactor;
             product.SellingPrice = Product.SellingPrice;
@@ -122,7 +121,7 @@ namespace WarehouseManagementController.Pages.ProductManagement
             product.Status = Product.Status;
             product.CategoryId = Product.CategoryId;
             product.Description = Product.Description;
-            product.ImageUrl = Product.ImageUrl;
+            product.ImageUrl = Product.ImageUrl; // <--- dòng này đảm bảo luôn gán link ảnh
             product.Quantity = (product.Quantity > 0 ? product.Quantity : 0) + Product.Quantity;
             product.UpdatedDateTime = DateTime.Now;
             product.CreatedDateTime = DateTime.Now;
@@ -132,7 +131,9 @@ namespace WarehouseManagementController.Pages.ProductManagement
             product.Category = categories.FirstOrDefault(c => c.Id == product.CategoryId);
 
             StateMemory.ImportRequestProducts.Add(product);
+
             return RedirectToPage("./ImportRequest");
         }
+
     }
 }
