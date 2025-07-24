@@ -50,10 +50,10 @@
                     <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3">Mã sản phẩm</th>
                         <th class="px-4 py-3">Tên sản phẩm</th>
+                        <th class="px-4 py-3">Hình ảnh</th>
                         <th class="px-4 py-3">Nhà sản xuất</th>
                         <th class="px-4 py-3">Giá bán</th>
                         <th class="px-4 py-3">Danh mục</th>
-                        <th class="px-4 py-3">Tạo bởi</th>
                         <th class="px-4 py-3">Tạo ngày</th>
                         <th class="px-4 py-3">Tình trạng</th>
                         <th class="px-4 py-3">Action</th>
@@ -65,10 +65,12 @@
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-sm"><a asp-page="./ProductDetails" asp-route-id="@item.Id"><p class="color-blue">@Html.DisplayFor(modelItem => item.SerialNumber)</p></a></td>
                             <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td class="px-4 py-3 text-sm text-center">
+                                <img src="@item.ImageUrl" alt="Ảnh sản phẩm" style="height: 50px; width: 50px; object-fit: cover;" />
+                            </td>
                             <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Manufactor)</td>
                             <td class="px-4 py-3 text-sm">@string.Format("{0:N0} VND", item.SellingPrice)</td>
                             <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Category.Name)</td>
-                            <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.CreatedByNavigation.Username)</td>
                             <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.CreatedDateTime)</td>
                             <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.StatusName)</td>
                             <td class="px-4 py-3">

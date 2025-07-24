@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,9 +22,15 @@ namespace WarehouseManagementController.Pages.ProductManagement
 
         [BindProperty(SupportsGet = true)]
         public List<SelectListItem> ProductSerialNumbers { set; get; } = default!;
-        public CreateProductModel(UnitOfWork unitOfWork)
+
+        [BindProperty]
+        public IFormFile ImageFile { get; set; }
+
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public CreateProductModel(UnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment )
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public void setDataInit(Product? product)
@@ -70,25 +77,53 @@ namespace WarehouseManagementController.Pages.ProductManagement
 
         public async Task<IActionResult> OnPostImportProductAsync()
         {
+            // Nếu cả link ảnh và file ảnh đều null => lỗi
+            if (ImageFile == null && string.IsNullOrWhiteSpace(Product.ImageUrl))
+            {
+                ModelState.AddModelError("Product.ImageUrl", "Bạn cần cung cấp link ảnh hoặc chọn ảnh từ máy.");
+                return Page();
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            var product = Id != null ? _unitOfWork.ProductRepository.Get(p => p.Id == Id) : new Product();
+            // Nếu có file ảnh => lưu file và cập nhật ImageUrl
+            if (ImageFile != null)
+            {
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "imageProduct");
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ImageFile.CopyToAsync(fileStream);
+                }
+
+                // Gán lại link tương đối để dùng trong view
+                Product.ImageUrl = "/imageProduct/" + uniqueFileName;
+            }
+
+            // Lấy sản phẩm cũ nếu có, không thì tạo mới
+            var product = Id != null
+                ? _unitOfWork.ProductRepository.Get(p => p.Id == Id)
+                : new Product();
+
+            // Lấy danh sách category (dùng cho Category navigation)
             var categories = _unitOfWork.CategoryRepository.GetAll();
 
+            // Gán lại thông tin sản phẩm
+            product.Name = Product.Name;
             product.Manufactor = Product.Manufactor;
             product.SellingPrice = Product.SellingPrice;
             product.ImportPrice = Product.ImportPrice;
             product.Notes = Product.Notes;
             product.Status = Product.Status;
-            product.Quantity = product.Quantity + Product.Quantity;
             product.CategoryId = Product.CategoryId;
             product.Description = Product.Description;
-            product.Name = Product.Name;
             product.ImageUrl = Product.ImageUrl;
-            product.SellingPrice = Product.SellingPrice;
+            product.Quantity = (product.Quantity > 0 ? product.Quantity : 0) + Product.Quantity;
             product.UpdatedDateTime = DateTime.Now;
             product.CreatedDateTime = DateTime.Now;
             product.ManufactureDateTime = DateTime.Now;
