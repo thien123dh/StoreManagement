@@ -53,7 +53,7 @@ namespace WarehouseManagementService.Implement
                 Promotion = 0,
                 Status = 1,
                 Notes = orderInfo.Notes,
-                Address = "",
+                Address = orderInfo.Adres,
                 ReceiptSerialNumber = GenerateReceiptSerialNumber(),
                 CustomerId = customer?.Id
             };

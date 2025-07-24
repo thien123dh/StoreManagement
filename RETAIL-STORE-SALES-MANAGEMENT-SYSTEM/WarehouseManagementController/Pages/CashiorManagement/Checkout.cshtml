@@ -81,7 +81,11 @@
                         <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập tên khách hàng" asp-for="@Model.OrderInfo.CustomerName" />
                     </div>
                     <div>
-                        <label for="amount">Ghi chú đơn hàng (Không bắt buộc)</label>
+                        <label for="amount">Địa chỉ(Bắt buộc)</label>
+                        <input required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập ghi địa chỉ" asp-for="@Model.OrderInfo.Adres" />
+                    </div>
+                    <div>
+                        <label for="amount">Note (Không bắt buộc)</label>
                         <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập ghi chú ngắn" asp-for="@Model.OrderInfo.Notes" />
                     </div>
                     <!-- Payment Method  -->
@@ -101,6 +105,12 @@
             </div>
         </div>
     </div>
+
+    <footer class="footer px-4 py-6">
+        <div class="footer-content">
+            <p class="text-sm text-gray-600 text-center">© Graduation 2025. All rights reserved. <a href="https://github.com/thien123dh/StoreManagement">NHÓM HỆ THỐNG QUẢN LÝ BÁN HÀNG TẠI CỬA HÀNG BÁN LẺ</a></p>
+        </div>
+    </footer>
 
 
     <script>

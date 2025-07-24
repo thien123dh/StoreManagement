@@ -44,10 +44,11 @@
             <table class="w-full whitespace-no-wrap">
                 <thead>
                     <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                        <th class="px-4 py-3">Id</th>
+                        <th class="px-4 py-3">Mã ID Danh Mục</th>
                         <th class="px-4 py-3">Tên Danh Mục</th>
                         <th class="px-4 py-3">Tạo bởi</th>
                         <th class="px-4 py-3">Ngày tạo</th>
+                        <th class="px-4 py-3">Ngày cuối cùng chỉnh sửa</th>
                         <th class="px-4 py-3">Action</th>
                     </tr>
                 </thead>
@@ -55,11 +56,14 @@
                     @foreach (var item in Model.Category.Items)
                     {
                         <tr class="text-gray-700 dark:text-gray-400">
-                            <td class="px-4 py-3">@Html.DisplayFor(modelItem => item.Id)</td>
+                            <td class="px-4 py-3">@Html.DisplayFor(modelItem => item.CategoryId)</td>
                             <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Name)</td>
                             <td class="px-4 py-3 text-sm">Admin</td>
                             <td class="px-4 py-3 text-sm">
                                 @item.CreatedDateTime?.ToString("dd/MM/yyyy")
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                @item.UpdatedDateTime?.ToString("dd/MM/yyyy")
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
@@ -140,7 +144,7 @@
     </div>
     <footer class="footer px-4 py-6">
         <div class="footer-content">
-            <p class="text-sm text-gray-600 text-center">© Graduation 2024. All rights reserved. <a href="https://github.com/VanHa1006/RentTutor_Project.git">by Group-7</a></p>
+            <p class="text-sm text-gray-600 text-center">© Graduation 2025. All rights reserved. <a href="https://github.com/thien123dh/StoreManagement">NHÓM HỆ THỐNG QUẢN LÝ BÁN HÀNG TẠI CỬA HÀNG BÁN LẺ</a></p>
         </div>
     </footer>
     </div>

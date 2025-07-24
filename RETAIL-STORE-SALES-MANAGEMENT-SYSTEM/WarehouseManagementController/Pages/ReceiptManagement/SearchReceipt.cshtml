@@ -24,7 +24,7 @@
                 <thead>
                     <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                         <th class="px-4 py-3">Mã Hóa Đơn</th>
-                        <th class="px-4 py-3">Số lượng sản phẩm</th>
+                        <th class="px-4 py-3">Địa chỉ khách hàng</th>
                         <th class="px-4 py-3">Tổng tiền</th>
                         <th class="px-4 py-3">Danh sách sản phẩm</th>
                         <th class="px-4 py-3">Khách hàng</th>
@@ -38,12 +38,12 @@
                     {
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.ReceiptSerialNumber)</td>
-                            <td class="px-4 py-3 text-sm">@item.ReceiptDetails.Count()</td>
+                            <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.Address)</td>
                             <td class="px-4 py-3 text-sm">@string.Format("{0:N0} VND", item.TotalPrice)</td>
                             <td class="px-4 py-3 text-sm">@item.ProductSerialNumbers</td>
                             <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.CustomerName)</td>
                             <td class="px-4 py-3 text-sm">@(item?.CreatedByNavigation?.Username)</td>
-                            <td class="px-4 py-3 text-sm">@Html.DisplayFor(modelItem => item.CreatedDateTime)</td>
+                            <td class="px-4 py-3 text-sm">@(item.CreatedDateTime?.ToString("dd/MM/yyyy"))</td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
                                     <a asp-page="./UpdateProduct" asp-route-id="@item.Id"
@@ -111,7 +111,7 @@
 
     <footer class="footer px-4 py-6">
         <div class="footer-content">
-            <p class="text-sm text-gray-600 text-center">© Graduation 2024. All rights reserved. <a href="https://github.com/VanHa1006/RentTutor_Project.git">by Group-7</a></p>
+            <p class="text-sm text-gray-600 text-center">© Graduation 2025. All rights reserved. <a href="https://github.com/thien123dh/StoreManagement">NHÓM HỆ THỐNG QUẢN LÝ BÁN HÀNG TẠI CỬA HÀNG BÁN LẺ</a></p>
         </div>
     </footer>
 

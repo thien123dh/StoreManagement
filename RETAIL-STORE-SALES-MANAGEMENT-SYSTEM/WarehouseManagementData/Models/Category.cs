@@ -21,4 +21,6 @@ public partial class Category
     public DateTime? UpdatedDateTime { get; set; }
 
     public short? Status { get; set; }
+
+    public string? CategoryId { get; set; }
 }
