@@ -28,10 +28,10 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build ./RETAIL-STORE-SALES-MANAGEMENT-SYSTEM/StoreManagement.sln --configuration Release
+        run: dotnet build ./RETAIL-STORE-SALES-MANAGEMENT-SYSTEM/DATN_2025_WarehouseManagement.sln --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish ./RETAIL-STORE-SALES-MANAGEMENT-SYSTEM/StoreManagement.sln -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish ./RETAIL-STORE-SALES-MANAGEMENT-SYSTEM/DATN_2025_WarehouseManagement.sln -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
