@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+using System.Runtime.ConstrainedExecution;
 
 namespace WarehouseManagementData.Models;
 
@@ -10,9 +12,12 @@ public partial class StoreManagementDbContext : DbContext
     {
     }
 
-    public StoreManagementDbContext(DbContextOptions<StoreManagementDbContext> options)
+    private readonly IConfiguration _configuration;
+
+    public StoreManagementDbContext(DbContextOptions<StoreManagementDbContext> options, IConfiguration configuration)
         : base(options)
     {
+        _configuration = configuration;
     }
 
     public virtual DbSet<Category> Categories { get; set; }
@@ -32,10 +37,11 @@ public partial class StoreManagementDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=(local);User Id=sa;Password=12345;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
-        //=> optionsBuilder.UseSqlServer("Server=HELLOHAVAN\\SQLEXPRESS;User Id=sa;Password=1234567890;Database=StoreManagementDb;Trusted_Connection=True;TrustServerCertificate=True;");
-
+    {
+        {
+            optionsBuilder.UseSqlServer("Server=tcp:iot-trading-system-db.database.windows.net,1433;Initial Catalog=StoreManagementsDB;Persist Security Info=False;User ID=iot_trading_system_admin;Password=asdqwe@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
+        }
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Category>(entity =>
