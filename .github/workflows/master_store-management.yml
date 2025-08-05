@@ -15,16 +15,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Debug folder structure
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Listing files:"
+          ls -R
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build RETAIL-STORE-SALES-MANAGEMENT-SYSTEM/StoreManagement.sln --configuration Release
+        working-directory: ./RETAIL-STORE-SALES-MANAGEMENT-SYSTEM
+        run: dotnet build StoreManagement.sln --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish RETAIL-STORE-SALES-MANAGEMENT-SYSTEM/StoreManagement.sln -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        working-directory: ./RETAIL-STORE-SALES-MANAGEMENT-SYSTEM
+        run: dotnet publish StoreManagement.sln -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
