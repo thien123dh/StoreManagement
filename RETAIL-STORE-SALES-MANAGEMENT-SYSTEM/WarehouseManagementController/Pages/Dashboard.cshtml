@@ -1,6 +1,7 @@
 ﻿@page
 @model WarehouseManagementController.Pages.DashboardModel
 @{
+    var currentMonth = DateTime.UtcNow.AddHours(7).Month;
     Layout = null;
 }
 <!DOCTYPE html>
@@ -97,18 +98,14 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="flex  justify-between mb-5">
-                                            <h4 class="text-gray-500 text-lg font-semibold sm:mb-0 mb-2">Lượng mua hàng & Số sản phẩm được bán ra</h4>
+                                            <h4 class="text-gray-500 text-lg font-semibold sm:mb-0 mb-2">Lượng mua hàng trong tuần</h4>
                                             <div class="hs-dropdown relative inline-flex [--placement:bottom-right] sm:[--trigger:hover]">
                                                 <a class="relative hs-dropdown-toggle cursor-pointer align-middle rounded-full">
                                                     <i class="ti ti-dots-vertical text-2xl text-gray-400"></i>
                                                 </a>
                                             </div>
                                         </div>
-                                        <div id="profit"
-                                             data-series='[
-        { "name": "Pixel", "data": [9, 5, 3, 7, 5, 10, 3] },
-           { "name": "Ample", "data": [6, 3, 9, 5, 4, 6, 4] }
-           ]'>
+                                        <div id="profit" data-series=[]>
                                         </div>
                                     </div>
                                 </div>
@@ -117,10 +114,10 @@
                             <div class="flex flex-col gap-6">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="text-gray-500 text-lg font-semibold mb-4">Lợi nhuận</h4>
+                                        <h4 class="text-gray-500 text-lg font-semibold mb-4">Doanh thu trong tháng @DateTime.UtcNow.AddHours(7).Month</h4>
                                         <div class="flex items-center justify-between gap-12">
                                             <div>
-                                                <h3 class="text-[22px] font-semibold text-gray-500 mb-4">36.358.562 VND</h3>
+                                                <h4 class="text-[22px] font-semibold text-gray-500 mb-4">@Model.DashboardData.TotalRevenue.ToString("N0") VND</h4>
                                                 <div class="flex items-center gap-1 mb-3">
                                                     <span class="flex items-center justify-center w-5 h-5 rounded-full bg-teal-400">
                                                         <i class="ti ti-arrow-up-left text-teal-500"></i>
@@ -147,14 +144,15 @@
                                     <div class="card-body">
                                         <div class="flex gap-6 items-center justify-between">
                                             <div class="flex flex-col gap-4">
-                                                <h4 class="text-gray-500 text-lg font-semibold">Sản phẩm bán ra nhiều nhất</h4>
+                                                <h4 class="text-gray-500 text-lg font-semibold">Best Seller tháng @currentMonth</h4>
                                                 <div class="flex flex-col gap-4">
-                                                    <h3 class="text-[22px] font-semibold text-gray-500">6,820,285 VND</h3>
+                                                    <h3 class="text-[22px] font-semibold text-gray-500">@(Model.DashboardData.BestSellerProduct?.TotalPrice.ToString("N0") ?? "") VND</h3>
+                                                    <h4 class="text-[22px] font-semibold text-gray-500">@(Model.DashboardData.BestSellerProduct?.TotalQuantity ?? 0) Sản phẩm</h4>
                                                     <div class="flex items-center gap-1">
                                                         <span class="flex items-center justify-center w-5 h-5 rounded-full bg-red-400">
                                                             <i class="ti ti-arrow-down-right text-red-500"></i>
                                                         </span>
-                                                        <p class="text-gray-400 text-sm font-normal text-nowrap">Bánh kem Socola</p>
+                                                        <p class="text-gray-400 text-sm font-normal text-nowrap">@(Model.DashboardData.BestSellerProduct?.ProductName ?? "Không có")</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -264,7 +262,7 @@
                             <div class="col-span-2">
                                 <div class="card h-full">
                                     <div class="card-body">
-                                        <h4 class="text-gray-500 text-lg font-semibold mb-5">Top Paying Clients</h4>
+                                        <h4 class="text-gray-500 text-lg font-semibold mb-5">Hoạt động năng nổ</h4>
                                         <div class="relative overflow-x-auto">
                                             <!-- table -->
                                             <table class="text-left w-full whitespace-nowrap text-sm text-gray-500">
@@ -321,7 +319,9 @@
     </main>
 
 
-
+    <script>
+        var dashboardData = @Html.Raw(Json.Serialize(Model.DashboardData));
+    </script>
     <script src="~/libs/jquery/dist/jquery.min.js"></script>
     <script src="./libs/simplebar/dist/simplebar.min.js"></script>
     <script src="./libs/iconify-icon/dist/iconify-icon.min.js"></script>

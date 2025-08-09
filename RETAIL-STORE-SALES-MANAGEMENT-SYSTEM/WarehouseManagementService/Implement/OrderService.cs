@@ -35,9 +35,9 @@ namespace WarehouseManagementService.Implement
                     Fullname = orderInfo.CustomerName,
                     Email = "",
                     CreatedBy = loginUserId,
-                    CreatedDateTime = DateTime.Now,
+                    CreatedDateTime = DateTime.UtcNow,
                     UpdatedBy = loginUserId,
-                    UpdatedDateTime = DateTime.Now,
+                    UpdatedDateTime = DateTime.UtcNow,
                     Status = 1
                 };
 
@@ -48,7 +48,7 @@ namespace WarehouseManagementService.Implement
             {
                 CreatedBy = loginUserId,
                 CustomerName = orderInfo.CustomerName ?? "Khách vãng lai",
-                CreatedDateTime = DateTime.Now,
+                CreatedDateTime = DateTime.UtcNow,
                 TotalPrice = totalPrice,
                 Promotion = 0,
                 Status = 1,

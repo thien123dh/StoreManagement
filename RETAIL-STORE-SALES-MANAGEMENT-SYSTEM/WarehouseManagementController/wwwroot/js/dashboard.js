@@ -1,18 +1,12 @@
 ﻿$(function () {
-
-
     // =====================================
     // Profit
     // =====================================
     var profit = {
         series: [
             {
-                name: ":Lượng mua hàng ",
-                data: [9, 5, 3, 7, 5, 10, 3],
-            },
-            {
-                name: "Số sản phẩm được bán ra ",
-                data: [6, 3, 9, 5, 4, 6, 4],
+                name: "Số sản phẩm được bán ra",
+                data: dashboardData.totalSelledData,
             },
         ],
         chart: {
@@ -47,7 +41,7 @@
         },
         xaxis: {
             type: "category",
-            categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            categories: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"],
             axisTicks: {
                 show: false,
             },
@@ -91,6 +85,8 @@
         ],
     };
 
+    console.log(profit);
+
     var chart_column_basic = new ApexCharts(
         document.querySelector("#profit"),
         profit
@@ -102,8 +98,8 @@
     // Breakup
     // =====================================
     var grade = {
-        series: [5368, 3500, 4106],
-        labels: ["Other", "Refferal", "Oragnic"],
+        series: [dashboardData.totalRevenue, dashboardData.totalImportPrice],
+        labels: ["Tiền bán hàng", "Tiền nhập hàng"],
         chart: {
             height: 170,
             type: "donut",
@@ -116,7 +112,7 @@
             fillSeriesColor: false,
         },
 
-        colors: ["#e7ecf0", "#fb977d", "#0085db"],
+        colors: ["#fb977d", "#0085db"],
         dataLabels: {
             enabled: false,
         },
@@ -217,9 +213,9 @@
         },
         series: [
             {
-                name: "Earnings",
+                name: "Bán được",
                 color: "#8763da",
-                data: [25, 66, 20, 40, 12, 58, 20],
+                data: dashboardData.totalSelledByMonth,
             },
         ],
         stroke: {
@@ -246,5 +242,8 @@
             },
         },
     };
+
+    console.log(earning);
+
     new ApexCharts(document.querySelector("#earning"), earning).render();
 })
