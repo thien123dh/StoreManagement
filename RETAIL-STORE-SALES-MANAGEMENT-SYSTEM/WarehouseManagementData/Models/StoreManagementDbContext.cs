@@ -39,7 +39,7 @@ public partial class StoreManagementDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         {
-            optionsBuilder.UseSqlServer("Server=tcp:iot-trading-system-db.database.windows.net,1433;Initial Catalog=StoreManagementsDB;Persist Security Info=False;User ID=iot_trading_system_admin;Password=asdqwe@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
+            optionsBuilder.UseSqlServer("Server=tcp:iot-trading-system-db.database.windows.net,1433;Initial Catalog=store-management-db;Persist Security Info=False;User ID=iot_trading_system_admin;Password=asdqwe@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
